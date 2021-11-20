@@ -71,7 +71,7 @@ class AuthenticationUtils {
           content: Text('Đăng nhập thành công!!'),
         ),
       );
-      context.router.pushNamed('/dashboard');
+      context.router.replaceNamed('/dashboard');
     } on FirebaseAuthException catch (e) {
       print(e.code);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -111,6 +111,7 @@ class AuthenticationUtils {
           content: Text('Đăng nhập với Google thành công!!'),
         ),
       );
+      context.router.replaceNamed('/dashboard');
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
