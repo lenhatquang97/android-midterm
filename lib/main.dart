@@ -1,14 +1,10 @@
 import 'package:android_midterm/routes/app_router.gr.dart';
-import 'package:android_midterm/utils/auth_util.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:android_midterm/models/order_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await AuthenticationUtils.initializeFirebase();
   runApp(MyApp());
 }
 

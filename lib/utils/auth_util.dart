@@ -2,19 +2,14 @@
 
 // ignore_for_file: avoid_print
 
+import 'package:android_midterm/utils/user_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:android_midterm/routes/app_router.gr.dart';
 
 class AuthenticationUtils {
-  static Future<FirebaseApp> initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
-    return firebaseApp;
-  }
-
   static Future<User?> signUpUsingEmailPassword(
       BuildContext context, String email, String password) async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -121,5 +116,12 @@ class AuthenticationUtils {
       );
     }
     return user;
+  }
+
+  //Sign out in firebase
+  static Future<void> signOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    await SecureStorage.deleteSecureData(SecureStorage.userID);
+    context.router.replaceNamed('/signin');
   }
 }

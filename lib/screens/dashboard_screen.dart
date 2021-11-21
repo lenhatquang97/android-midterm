@@ -1,5 +1,6 @@
 import 'package:android_midterm/screens/billing_log_screen.dart';
 import 'package:android_midterm/screens/debt_log_screen.dart';
+import 'package:android_midterm/screens/settings/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -13,7 +14,11 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int currentIndex = 0;
 
-  List<Widget> screens = [const DebtLogScreen(), const BillingLogScreen()];
+  List<Widget> screens = [
+    const DebtLogScreen(),
+    const BillingLogScreen(),
+    SettingsScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +37,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Icons.text_snippet,
             ),
             label: 'Đơn hàng',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.settings,
+            ),
+            label: 'Thiết lập',
           ),
         ],
         currentIndex: currentIndex,
