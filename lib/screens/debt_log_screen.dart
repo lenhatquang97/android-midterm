@@ -73,7 +73,7 @@ class DebtLogScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: DebtLogCard(
                         model: DebtModel(
-                            amount: 110,
+                            amount: 110000,
                             dueDate: DateTime.now(),
                             createdAt: DateTime.now(),
                             enable: true,
