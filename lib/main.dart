@@ -1,33 +1,28 @@
-import 'package:android_midterm/provider/order_provider.dart';
-import 'package:android_midterm/provider/picker_provider.dart';
-import 'package:android_midterm/screens/add_debt.dart';
-import 'package:android_midterm/screens/add_order.dart';
-import 'package:android_midterm/screens/map_picker_v2.dart';
+
+import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
+  // This widget is the root of your application.
+  final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => OrderProvider()),
-        ChangeNotifierProvider(
-          create: (context) => PickerProvider.instance,
-        )
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: AddDebt(),
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
+      debugShowCheckedModeBanner: false,
+      title: 'Android Midterm',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
     );
   }
