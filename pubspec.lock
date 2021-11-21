@@ -211,6 +211,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+
   fake_async:
     dependency: transitive
     description:
@@ -274,6 +275,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+
   fixnum:
     dependency: transitive
     description:
@@ -281,11 +283,33 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_keyboard_visibility:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.0"
+  flutter_keyboard_visibility_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  flutter_keyboard_visibility_web:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -300,6 +324,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
+
   flutter_polyline_points:
     dependency: "direct main"
     description:
@@ -349,16 +374,25 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.2"
+
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_typeahead:
+    dependency: "direct main"
+    description:
+      name: flutter_typeahead
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+
   frontend_server_client:
     dependency: transitive
     description:
@@ -380,6 +414,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+
   google_maps_flutter:
     dependency: "direct main"
     description:
@@ -394,6 +429,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.3"
+
   google_sign_in:
     dependency: "direct main"
     description:
@@ -443,6 +479,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+
   http_parser:
     dependency: transitive
     description:
@@ -456,6 +493,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
+
     version: "0.17.0"
   io:
     dependency: transitive
@@ -464,6 +502,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+
   js:
     dependency: transitive
     description:
@@ -506,6 +545,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+
   logging:
     dependency: transitive
     description:
@@ -513,6 +553,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+
   matcher:
     dependency: transitive
     description:
@@ -534,6 +575,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+
+
   mime:
     dependency: transitive
     description:
@@ -548,6 +591,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+
   path:
     dependency: transitive
     description:
@@ -618,6 +662,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+
+  provider:
+    dependency: "direct dev"
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.1"
+  rflutter_alert:
+    dependency: "direct main"
+    description:
+      name: rflutter_alert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
+
   pool:
     dependency: transitive
     description:
@@ -667,6 +727,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+
   sky_engine:
     dependency: transitive
     description: flutter
