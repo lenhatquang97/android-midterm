@@ -73,11 +73,14 @@ class DebtLogScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: DebtLogCard(
                         model: DebtModel(
-                            stateDebt: 1,
-                            personName: 'Nguyễn Văn A',
-                            cost: 1000000,
-                            timeUpdated: DateTime.now(),
-                            description: 'Đặt cọc cho nhà đất')),
+                            amount: 110,
+                            dueDate: DateTime.now(),
+                            createdAt: DateTime.now(),
+                            enable: true,
+                            isDebt: true,
+                            name: 'abc',
+                            note: 'xyz',
+                            phone: '0123456789')),
                   );
                 },
               ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class DebtModel {
   int amount = 0;
@@ -10,7 +11,15 @@ class DebtModel {
   String note = '';
   String phone = '';
 
-  DebtModel() {}
+  DebtModel(
+      {required amount,
+      required dueDate,
+      required createdAt,
+      required enable,
+      required isDebt,
+      required name,
+      required note,
+      required phone});
   Future<void> fetchOrder(docId) async {
     final firestoreInstance = FirebaseFirestore.instance;
     await firestoreInstance.collection("khoanno").doc(docId).get().then((data) {
