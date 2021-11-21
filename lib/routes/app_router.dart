@@ -3,6 +3,7 @@ import 'package:android_midterm/screens/authentication/sign_up_screen.dart';
 import 'package:android_midterm/screens/dashboard_screen.dart';
 import 'package:android_midterm/screens/debt_screen.dart';
 import 'package:android_midterm/screens/order_screen.dart';
+import 'package:android_midterm/screens/wrapper/authentication_wrapper_screen.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/annotations.dart';
 //Uncomment to prepare for generating
@@ -12,10 +13,14 @@ import 'package:auto_route/annotations.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Page,Screen', routes: <AutoRoute>[
   CustomRoute(
-      path: '/signin',
-      page: SignInScreen,
+      path: '/wrapper',
+      page: AuthenticationWrapperScreen,
       initial: true,
       transitionsBuilder: TransitionsBuilders.slideRightWithFade),
+  CustomRoute(
+    path: '/signin',
+    page: SignInScreen,
+  ),
   AutoRoute(
     path: '/signup',
     page: SignUpScreen,
