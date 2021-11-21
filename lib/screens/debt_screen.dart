@@ -131,10 +131,8 @@ class _State extends State<DebtScreen> {
                           SizedBox(height: 10),
                           Center(
                             child: Text(
-                              debt.isDebt
-                                  ? '-'
-                                  : '' +
-                                      '${formatCurrency.format(debt.amount)} đ',
+                              (debt.isDebt ? '-' : '') +
+                                  '${formatCurrency.format(debt.amount)} đ',
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                                   color:
