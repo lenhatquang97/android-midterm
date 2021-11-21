@@ -5,7 +5,10 @@ import 'package:android_midterm/screens/debt_screen.dart';
 import 'package:android_midterm/screens/order_screen.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/annotations.dart';
-// part 'app_router.g.dart';
+//Uncomment to prepare for generating
+//part 'app_router.g.dart';
+//Command for generating the router file
+//flutter pub run build_runner build --delete-conflicting-outputs
 
 @MaterialAutoRouter(replaceInRouteName: 'Page,Screen', routes: <AutoRoute>[
   CustomRoute(

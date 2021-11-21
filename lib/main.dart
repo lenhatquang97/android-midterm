@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Android Midterm',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
