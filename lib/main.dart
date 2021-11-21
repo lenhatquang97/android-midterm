@@ -1,4 +1,3 @@
-
 import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';

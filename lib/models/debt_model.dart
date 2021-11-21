@@ -46,4 +46,16 @@ class DebtModel {
       await fetchDebt(docId, uid);
     }
   }
+
+  DebtModel.fromJson(Map<String, dynamic> json) {
+    note = json['note'] as String;
+    amount = json['amount'] as int;
+    enable = json['enable'] as bool;
+    dueDate = (json['due_date'] as Timestamp).toDate();
+    name = json['name'] as String;
+    createdAt = (json['created_at'] as Timestamp).toDate();
+    phone = json['phone_number'] as String;
+    createdBy = json['created_by'] as String;
+    isDebt = json['is_debt'] as bool;
+  }
 }

@@ -1,14 +1,17 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:android_midterm/logic/fetch_debt_or_bill.dart';
 import 'package:android_midterm/models/debt_model.dart';
+import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:android_midterm/widgets/debt_log_card.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 
 //Create a screen with ListView of DebtLog
 //DebtLog contains IsDebt, Person, Money, Date, Description
 //IsDebt is a boolean, Person is a string, Money is a double, Date is a string, Description is a string
 class DebtLogScreen extends StatelessWidget {
-  //final DebtModel model;
   const DebtLogScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -63,28 +66,36 @@ class DebtLogScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: 10,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    child: DebtLogCard(
-                        model: DebtModel(
-                            amount: 110000,
-                            dueDate: DateTime.now(),
-                            createdAt: DateTime.now(),
-                            enable: true,
-                            isDebt: true,
-                            name: 'abc',
-                            note: 'xyz',
-                            phone: '0123456789',
-                            createdBy: '0')),
+            FutureBuilder<Map<String, Map<String, dynamic>>>(
+              future: fetchData('khoanno'),
+              // ignore: avoid_types_as_parameter_names
+              builder: (context,
+                  AsyncSnapshot<Map<String, Map<String, dynamic>>> snapshot) {
+                if (snapshot.hasData) {
+                  final data = snapshot.data;
+                  return Expanded(
+                      child: ListView(
+                          children: data!.entries
+                              .map((e) => GestureDetector(
+                                    onTap: () {
+                                      context.router
+                                          .push(DebtScreen(debtId: e.key));
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: DebtLogCard(
+                                        model: DebtModel.fromJson(e.value),
+                                      ),
+                                    ),
+                                  ))
+                              .toList()));
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                },
-              ),
+                }
+              },
             ),
             Align(
               alignment: Alignment.bottomCenter,
