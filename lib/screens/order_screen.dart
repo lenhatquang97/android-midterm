@@ -6,12 +6,11 @@ import 'dart:ui' as ui show PlaceholderAlignment;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:android_midterm/models/order_model.dart';
 import 'package:location/location.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:intl/intl.dart';
 
@@ -56,15 +55,21 @@ Future<LatLng?> Permission() async {
 }
 
 class OrderScreen extends StatefulWidget {
+  final String orderId;
   const OrderScreen({
     Key? key,
+    required this.orderId,
   }) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _State createState() => _State(orderId);
 }
 
 class _State extends State<OrderScreen> {
+  final String orderId;
+  _State(this.orderId);
+
+  final String uid = FirebaseAuth.instance.currentUser!.uid as String;
   final Set<Marker> markers = new Set();
   OrderModel order = OrderModel();
   GoogleMapController? mapController;
@@ -149,7 +154,7 @@ class _State extends State<OrderScreen> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     } else {
-      print('askljfasdjf;a');
+      print('null');
     }
 
     // Defining an ID
@@ -179,7 +184,7 @@ class _State extends State<OrderScreen> {
   @override
   initState() {
     super.initState();
-    order.fetchOrder("N3TUt3Yo83rg33doApGk").then((result) {
+    order.fetchOrder(orderId, uid).then((result) {
       Dest = LatLng(order.location.latitude, order.location.longitude);
       cp = CameraPosition(
         target:
@@ -436,9 +441,14 @@ class _State extends State<OrderScreen> {
                   Expanded(
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(primary: Colors.red),
-                          onPressed: () {
-                            // Respond to button press
-                          },
+                          onPressed: !order.enable
+                              ? null
+                              : () {
+                                  order.update(orderId, uid,
+                                      {"enable": false}).then((result) {
+                                    setState(() {});
+                                  });
+                                },
                           child: Container(
                               height: 50,
                               alignment: Alignment.center,
@@ -450,14 +460,19 @@ class _State extends State<OrderScreen> {
                   SizedBox(width: 15),
                   Expanded(
                       child: ElevatedButton(
-                          onPressed: () {
-                            // Respond to button press
-                          },
+                          onPressed: !order.enable
+                              ? null
+                              : () {
+                                  order.update(orderId, uid,
+                                      {"enable": false}).then((result) {
+                                    setState(() {});
+                                  });
+                                },
                           child: Container(
                               height: 50,
                               alignment: Alignment.center,
                               child: Text(
-                                'Hoàn tất',
+                                order.enable ? 'Hoàn tất' : 'Đã hoàn tất',
                                 style: defautText(color: 0xFFFFFFFF),
                                 textAlign: TextAlign.center,
                               )))),

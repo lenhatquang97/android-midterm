@@ -4,6 +4,11 @@ import 'dart:ui' as ui show PlaceholderAlignment;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+import 'package:android_midterm/models/debt_model.dart';
+
+DateFormat dateFormat = DateFormat("HH:mm dd-MM-yyyy");
 
 TextStyle defautText({int color = 0xFF000000}) {
   return GoogleFonts.nunito(
@@ -17,18 +22,32 @@ TextStyle defautText({int color = 0xFF000000}) {
 }
 
 class DebtScreen extends StatefulWidget {
-  const DebtScreen({
-    Key? key,
-  }) : super(key: key);
+  final String debtId;
+  const DebtScreen({Key? key, required this.debtId}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _State createState() => _State(debtId);
 }
 
 class _State extends State<DebtScreen> {
+  final String debtId;
+  _State(this.debtId);
+
   final datasets = <String, dynamic>{};
+  final String uid = FirebaseAuth.instance.currentUser!.uid as String;
+
+  DebtModel debt = DebtModel.empty();
+  @override
+  initState() {
+    super.initState();
+    debt.fetchDebt(debtId, uid).then((result) {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final formatCurrency = NumberFormat('#,##0.00', 'ID');
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Column(
@@ -95,10 +114,11 @@ class _State extends State<DebtScreen> {
                         children: [
                           Center(
                             child: Text(
-                              'Tôi nợ',
+                              debt.isDebt ? 'Tôi nợ' : 'Tôi cho nợ',
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
-                                  color: Color.fromARGB(255, 255, 60, 60),
+                                  color:
+                                      debt.isDebt ? Colors.red : Colors.green,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 50,
                                   fontStyle: FontStyle.normal,
@@ -111,10 +131,14 @@ class _State extends State<DebtScreen> {
                           SizedBox(height: 10),
                           Center(
                             child: Text(
-                              '-10,000 đ',
+                              debt.isDebt
+                                  ? '-'
+                                  : '' +
+                                      '${formatCurrency.format(debt.amount)} đ',
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
-                                  color: Color.fromARGB(255, 255, 60, 60),
+                                  color:
+                                      debt.isDebt ? Colors.red : Colors.green,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 30,
                                   fontStyle: FontStyle.normal,
@@ -131,7 +155,7 @@ class _State extends State<DebtScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'Kết thúc: 21/11/2021',
+                                'Kết thúc: ${dateFormat.format(debt.dueDate)}',
                                 style: defautText(color: 0xFF6886C5),
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
@@ -231,7 +255,7 @@ class _State extends State<DebtScreen> {
                             ),
                             SizedBox(width: 15),
                             Text(
-                              '20/11/2021',
+                              '${dateFormat.format(debt.dueDate)}',
                               style: defautText(color: 0xFF000000),
                               textAlign: TextAlign.left,
                               maxLines: 1,
@@ -256,7 +280,7 @@ class _State extends State<DebtScreen> {
                             SizedBox(width: 15),
                             Flexible(
                               child: Text(
-                                'Ay yo',
+                                debt.note,
                                 style: defautText(color: 0xFF000000),
                                 textAlign: TextAlign.left,
                               ),
@@ -290,9 +314,14 @@ class _State extends State<DebtScreen> {
               Expanded(
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: Colors.red),
-                      onPressed: () {
-                        // Respond to button press
-                      },
+                      onPressed: !debt.enable
+                          ? null
+                          : () {
+                              debt.update(debtId, uid, {"enable": false}).then(
+                                  (result) {
+                                setState(() {});
+                              });
+                            },
                       child: Container(
                           height: 50,
                           alignment: Alignment.center,
@@ -304,14 +333,19 @@ class _State extends State<DebtScreen> {
               SizedBox(width: 15),
               Expanded(
                   child: ElevatedButton(
-                      onPressed: () {
-                        // Respond to button press
-                      },
+                      onPressed: !debt.enable
+                          ? null
+                          : () {
+                              debt.update(debtId, uid, {"enable": false}).then(
+                                  (result) {
+                                setState(() {});
+                              });
+                            },
                       child: Container(
                           height: 50,
                           alignment: Alignment.center,
                           child: Text(
-                            'Hoàn tất',
+                            debt.enable ? 'Hoàn tất' : 'Đã hoàn tất',
                             style: defautText(color: 0xFFFFFFFF),
                             textAlign: TextAlign.center,
                           )))),

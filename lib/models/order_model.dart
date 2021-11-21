@@ -18,22 +18,33 @@ class OrderModel {
   bool enable = true;
   String createdBy = '';
   OrderModel() {}
-  Future<void> fetchOrder(docId) async {
+  Future<void> fetchOrder(docId, uid) async {
     final firestoreInstance = FirebaseFirestore.instance;
     await firestoreInstance.collection("donhang").doc(docId).get().then((data) {
-      note = data["note"];
-      phone = data["phone"];
-      dueDate = data["dueDate"].toDate();
-      location = data["location"];
-      address = data["address"];
-      name = data["name"];
-      enable = data["enable"];
       createdBy = data["created_by"];
-      List<dynamic> tmp = List.from(data["product"]);
-      for (var element in tmp) {
-        // print(element['name']);
-        products.add(Product(name: element['name'], qua: element['qua']));
+      if (createdBy == uid) {
+        note = data["note"];
+        phone = data["phone_number"];
+        dueDate = data["due_date"].toDate();
+        location = data["location"];
+        address = data["address"];
+        name = data["name"];
+        enable = data["enable"];
+        List<dynamic> tmp = List.from(data["product"]);
+        products = [];
+        for (var element in tmp) {
+          // print(element['name']);
+          products.add(Product(name: element['name'], qua: element['qua']));
+        }
       }
     });
+  }
+
+  Future<void> update(docId, uid, newData) async {
+    if (createdBy == uid) {
+      final firestoreInstance = FirebaseFirestore.instance;
+      await firestoreInstance.collection('donhang').doc(docId).update(newData);
+      await fetchOrder(docId, uid);
+    }
   }
 }

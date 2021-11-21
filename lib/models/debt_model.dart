@@ -11,6 +11,7 @@ class DebtModel {
   String note = '';
   String phone = '';
   String createdBy = '';
+  DebtModel.empty();
   DebtModel(
       {required amount,
       required dueDate,
@@ -21,18 +22,28 @@ class DebtModel {
       required note,
       required phone,
       required createdBy});
-  Future<void> fetchOrder(docId) async {
+  Future<void> fetchDebt(docId, uid) async {
     final firestoreInstance = FirebaseFirestore.instance;
     await firestoreInstance.collection("khoanno").doc(docId).get().then((data) {
-      note = data["note"];
-      phone = data["phone"];
-      dueDate = data["dueDate"].toDate();
-      name = data["name"];
-      enable = data["enable"];
-      isDebt = data["is_debt"];
-      createdAt = data["created_at"].toDate();
-      phone = data["phoneNumber"];
       createdBy = data["created_by"];
+      if (createdBy == uid) {
+        note = data["note"];
+        dueDate = data["due_date"].toDate();
+        amount = data["amount"];
+        name = data["name"];
+        enable = data["enable"];
+        isDebt = data["is_debt"];
+        createdAt = data["created_at"].toDate();
+        phone = data["phone_number"];
+      }
     });
+  }
+
+  Future<void> update(docId, uid, newData) async {
+    if (createdBy == uid) {
+      final firestoreInstance = FirebaseFirestore.instance;
+      await firestoreInstance.collection('khoanno').doc(docId).update(newData);
+      await fetchDebt(docId, uid);
+    }
   }
 }
