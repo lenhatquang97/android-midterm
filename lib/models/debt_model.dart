@@ -10,7 +10,7 @@ class DebtModel {
   String name = '';
   String note = '';
   String phone = '';
-
+  String createdBy = '';
   DebtModel(
       {required amount,
       required dueDate,
@@ -19,7 +19,8 @@ class DebtModel {
       required isDebt,
       required name,
       required note,
-      required phone});
+      required phone,
+      required createdBy});
   Future<void> fetchOrder(docId) async {
     final firestoreInstance = FirebaseFirestore.instance;
     await firestoreInstance.collection("khoanno").doc(docId).get().then((data) {
@@ -31,6 +32,7 @@ class DebtModel {
       isDebt = data["is_debt"];
       createdAt = data["created_at"].toDate();
       phone = data["phoneNumber"];
+      createdBy = data["created_by"];
     });
   }
 }

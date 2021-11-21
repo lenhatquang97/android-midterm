@@ -16,7 +16,7 @@ class OrderModel {
   String address = '';
   List<Product> products = [];
   bool enable = true;
-
+  String createdBy = '';
   OrderModel() {}
   Future<void> fetchOrder(docId) async {
     final firestoreInstance = FirebaseFirestore.instance;
@@ -28,6 +28,7 @@ class OrderModel {
       address = data["address"];
       name = data["name"];
       enable = data["enable"];
+      createdBy = data["created_by"];
       List<dynamic> tmp = List.from(data["product"]);
       for (var element in tmp) {
         // print(element['name']);
