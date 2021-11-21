@@ -8,6 +8,7 @@ class DebtLogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(model.name);
     return Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

@@ -50,12 +50,16 @@ class AppRouter extends _i7.RootStackRouter {
           routeData: routeData, child: _i4.DashboardScreen(key: args.key));
     },
     DebtScreen.name: (routeData) {
+      final args = routeData.argsAs<DebtScreenArgs>();
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i5.DebtScreen());
+          routeData: routeData,
+          child: _i5.DebtScreen(key: args.key, debtId: args.debtId));
     },
     OrderScreen.name: (routeData) {
+      final args = routeData.argsAs<OrderScreenArgs>();
       return _i7.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i6.OrderScreen());
+          routeData: routeData,
+          child: _i6.OrderScreen(key: args.key, orderId: args.orderId));
     }
   };
 
@@ -113,15 +117,47 @@ class DashboardScreenArgs {
 }
 
 /// generated route for [_i5.DebtScreen]
-class DebtScreen extends _i7.PageRouteInfo<void> {
-  const DebtScreen() : super(name, path: '/debt-detail');
+class DebtScreen extends _i7.PageRouteInfo<DebtScreenArgs> {
+  DebtScreen({_i8.Key? key, required String debtId})
+      : super(name,
+            path: '/debt-detail',
+            args: DebtScreenArgs(key: key, debtId: debtId));
 
   static const String name = 'DebtScreen';
 }
 
+class DebtScreenArgs {
+  const DebtScreenArgs({this.key, required this.debtId});
+
+  final _i8.Key? key;
+
+  final String debtId;
+
+  @override
+  String toString() {
+    return 'DebtScreenArgs{key: $key, debtId: $debtId}';
+  }
+}
+
 /// generated route for [_i6.OrderScreen]
-class OrderScreen extends _i7.PageRouteInfo<void> {
-  const OrderScreen() : super(name, path: '/order-detail');
+class OrderScreen extends _i7.PageRouteInfo<OrderScreenArgs> {
+  OrderScreen({_i8.Key? key, required String orderId})
+      : super(name,
+            path: '/order-detail',
+            args: OrderScreenArgs(key: key, orderId: orderId));
 
   static const String name = 'OrderScreen';
+}
+
+class OrderScreenArgs {
+  const OrderScreenArgs({this.key, required this.orderId});
+
+  final _i8.Key? key;
+
+  final String orderId;
+
+  @override
+  String toString() {
+    return 'OrderScreenArgs{key: $key, orderId: $orderId}';
+  }
 }
