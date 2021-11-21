@@ -66,7 +66,7 @@ class _State extends State<DebtScreen> {
                         padding: const EdgeInsets.all(15),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30.0),
-                          color: Color(0xFFFFFFFF),
+                          color: const Color(0xFFFFFFFF),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.5),
