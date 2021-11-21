@@ -17,26 +17,27 @@ class DebtLogCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(model.stateDebt == 1 ? 'Tôi cho nợ' : 'Tôi nợ',
+              Text(model.isDebt == false ? 'Tôi cho nợ' : 'Tôi nợ',
                   style: TextStyle(
                       fontSize: 20,
-                      color: model.stateDebt == 1 ? Colors.green : Colors.red,
+                      color: model.isDebt == false ? Colors.green : Colors.red,
                       fontWeight: FontWeight.bold)),
               const SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(model.personName, style: const TextStyle(fontSize: 20)),
-                  Text(formatMoney(model.cost),
+                  Text(model.name, style: const TextStyle(fontSize: 20)),
+                  Text(formatMoney(model.amount),
                       style: TextStyle(
                         fontSize: 20,
-                        color: model.stateDebt == 1 ? Colors.green : Colors.red,
+                        color:
+                            model.isDebt == false ? Colors.green : Colors.red,
                       ))
                 ],
               ),
               const SizedBox(height: 5),
               Text(
-                  '${model.timeUpdated.day}/${model.timeUpdated.month}/${model.timeUpdated.year}',
+                  '${model.dueDate.day}/${model.dueDate.month}/${model.dueDate.year}',
                   style: const TextStyle(fontSize: 20))
             ],
           ),
