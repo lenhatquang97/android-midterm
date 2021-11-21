@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({Key? key}) : super(key: key);
-  String xx = FirebaseAuth.instance.currentUser!.photoURL as String;
   String name = FirebaseAuth.instance.currentUser!.email as String;
+  String avatarURL = FirebaseAuth.instance.currentUser!.photoURL ?? "none";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +20,18 @@ class SettingsScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
-                  minRadius: 50,
-                  maxRadius: 70,
-                  backgroundImage: NetworkImage(xx)),
+              avatarURL != "none"
+                  ? CircleAvatar(
+                      minRadius: 30,
+                      maxRadius: 40,
+                      backgroundImage: NetworkImage(avatarURL))
+                  : CircleAvatar(
+                      minRadius: 30,
+                      maxRadius: 40,
+                      child: Text(
+                        name.substring(0, 1),
+                        style: const TextStyle(fontSize: 40),
+                      )),
               const SizedBox(
                 height: 10,
               ),

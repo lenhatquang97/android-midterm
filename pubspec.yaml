@@ -33,28 +33,28 @@ dependencies:
   firebase_auth: ^3.2.0
   firebase_core: ^1.10.0
   firebase_database: ^8.1.0
-  rflutter_alert: ^2.0.4
-  flutter_typeahead: ^3.2.1
-  google_maps_flutter: ^2.1.1
   flutter:
     sdk: flutter
   flutter_polyline_points: ^1.0.0
   flutter_secure_storage: ^5.0.2
+  flutter_typeahead: ^3.2.1
   google_fonts: ^2.1.0
+  google_maps_flutter: ^2.1.1
   google_sign_in: ^5.2.1
   intl: ^0.17.0
   location: ^4.3.0
   material_design_icons_flutter: ^5.0.6295
+  rflutter_alert: ^2.0.4
   url_launcher: ^6.0.13
 
 dev_dependencies:
   auto_route_generator: ^3.1.0
   build_runner: ^2.1.5
-  flutter_lints: ^1.0.0
-  provider: ^6.0.1
   dio: ^4.0.3
+  flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
+  provider: ^6.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
