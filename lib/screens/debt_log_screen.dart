@@ -80,7 +80,8 @@ class DebtLogScreen extends StatelessWidget {
                             isDebt: true,
                             name: 'abc',
                             note: 'xyz',
-                            phone: '0123456789')),
+                            phone: '0123456789',
+                            createdBy: '0')),
                   );
                 },
               ),
