@@ -25,6 +25,7 @@ class AuthenticationUtils {
           content: Text('Đăng ký thành công!!!'),
         ),
       );
+
       context.router.pushNamed('/signin');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -61,6 +62,7 @@ class AuthenticationUtils {
         password: password,
       );
       user = userCredential.user;
+      await SecureStorage.writeSecureData(SecureStorage.userID, user!.uid);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Đăng nhập thành công!!'),
@@ -101,6 +103,7 @@ class AuthenticationUtils {
     try {
       UserCredential userCredential = await signInWithGoogle();
       user = userCredential.user;
+      await SecureStorage.writeSecureData(SecureStorage.userID, user!.uid);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Đăng nhập với Google thành công!!'),
