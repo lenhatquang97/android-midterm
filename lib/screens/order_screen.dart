@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -6,12 +6,17 @@ import 'dart:ui' as ui show PlaceholderAlignment;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:android_midterm/models/order_model.dart';
+import 'package:location/location.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'dart:math' show cos, sqrt, asin;
+import 'package:intl/intl.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+DateFormat dateFormat = DateFormat("HH:mm dd-MM-yyyy");
+final firestoreInstance = FirebaseFirestore.instance;
 
 TextStyle defautText({int color = 0xFF000000}) {
   return GoogleFonts.nunito(
@@ -24,24 +29,34 @@ TextStyle defautText({int color = 0xFF000000}) {
   ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+Future<LatLng?> Permission() async {
+  Location location = Location();
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const PageEntryPoint(),
-    );
+  bool? _serviceEnabled;
+  PermissionStatus? _permissionGranted;
+  LocationData? _locationData;
+
+  _serviceEnabled = await location.serviceEnabled();
+  if (!_serviceEnabled) {
+    _serviceEnabled = await location.requestService();
+    if (!_serviceEnabled) {
+      return LatLng(0, 0);
+    }
   }
+
+  _permissionGranted = await location.hasPermission();
+  if (_permissionGranted == PermissionStatus.denied) {
+    _permissionGranted = await location.requestPermission();
+    if (_permissionGranted != PermissionStatus.granted) {
+      return LatLng(0, 0);
+    }
+  }
+  _locationData = await location.getLocation();
+  return LatLng(_locationData.latitude!, _locationData.longitude!);
 }
 
-class PageEntryPoint extends StatefulWidget {
-  const PageEntryPoint({
+class OrderScreen extends StatefulWidget {
+  const OrderScreen({
     Key? key,
   }) : super(key: key);
 
@@ -49,30 +64,173 @@ class PageEntryPoint extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<PageEntryPoint> {
-  final datasets = <String, dynamic>{};
+class _State extends State<OrderScreen> {
   final Set<Marker> markers = new Set();
-  static const LatLng showLocation = const LatLng(27.7089427, 85.3086209);
+  OrderModel order = OrderModel();
+  GoogleMapController? mapController;
+  CameraPosition cp = CameraPosition(
+    target: LatLng(0.0, 0.0),
+  );
+
+  bool isLoading = true;
+  double totalDistance = 0.0;
+  LatLng Dest = LatLng(0, 0);
+  LatLng Curr = LatLng(0, 0);
+
+// Object for PolylinePoints
+  late PolylinePoints polylinePoints;
+
+// List of coordinates to join
+  List<LatLng> polylineCoordinates = [];
+
+// Map storing polylines created by connecting two points
+  Map<PolylineId, Polyline> polylines = {};
+
+  Widget productList(List<Product> arr) {
+    List<Widget> list = [];
+    for (var i = 0; i < arr.length; i++) {
+      list.add(SizedBox(height: 10));
+      list.add(
+        Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                Expanded(
+                    flex: 2,
+                    child: Text(
+                      arr[i].name,
+                      style: TextStyle(color: Colors.black, fontSize: 14.0),
+                    )),
+                Text('${arr[i].qua}')
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return Column(children: list);
+  }
+
+  double _coordinateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  Future<double> _createPolylines(
+    double startLatitude,
+    double startLongitude,
+    double destinationLatitude,
+    double destinationLongitude,
+  ) async {
+    // Initializing PolylinePoints
+    polylinePoints = PolylinePoints();
+
+    // Generating the list of coordinates to be used for
+    // drawing the polylines
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      "AIzaSyBKIDtv0IA8gwYbYBdrAuiCRuQ231vpf2E", // Google Maps API Key
+      PointLatLng(startLatitude, startLongitude),
+      PointLatLng(destinationLatitude, destinationLongitude),
+    );
+
+    // Adding the coordinates to the list
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      print('askljfasdjf;a');
+    }
+
+    // Defining an ID
+    PolylineId id = PolylineId('poly');
+
+    // Initializing Polyline
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Colors.blue,
+      points: polylineCoordinates,
+      width: 3,
+    );
+
+    // Adding the polyline to the map
+    polylines[id] = polyline;
+    for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+      totalDistance += _coordinateDistance(
+        polylineCoordinates[i].latitude,
+        polylineCoordinates[i].longitude,
+        polylineCoordinates[i + 1].latitude,
+        polylineCoordinates[i + 1].longitude,
+      );
+    }
+    return totalDistance;
+  }
+
+  @override
+  initState() {
+    super.initState();
+    order.fetchOrder("N3TUt3Yo83rg33doApGk").then((result) {
+      Dest = LatLng(order.location.latitude, order.location.longitude);
+      cp = CameraPosition(
+        target:
+            LatLng(order.location.latitude - 0.001, order.location.longitude),
+        zoom: 15,
+      );
+      markers.add(Marker(
+        //add first marker
+        markerId: MarkerId(Dest.toString()),
+        position: Dest, //position of marker
+        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+      ));
+      Permission().then((result) {
+        Curr = LatLng(result!.latitude, result.longitude);
+        // markers.add(Marker(
+        //   //add first marker
+        //   markerId: MarkerId(Curr.toString()),
+        //   position: Curr, //position of marker
+        //   icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+        // ));
+        _createPolylines(
+                Curr.latitude, Curr.longitude, Dest.latitude, Dest.longitude)
+            .then((res) => {
+                  setState(() {
+                    isLoading = false;
+                  })
+                });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    GoogleMapController mapController;
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height / 2,
-            width: MediaQuery.of(context).size.width,
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(27.7089427, 85.3086209),
-                zoom: 15,
+          if (isLoading == false)
+            Container(
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.width,
+              child: GoogleMap(
+                initialCameraPosition: cp,
+                myLocationEnabled: true,
+                polylines: Set<Polyline>.of(polylines.values),
+                markers: markers,
+                zoomControlsEnabled: false,
+                onMapCreated: (GoogleMapController controller) {
+                  mapController = controller;
+                },
               ),
-              markers: getmarkers(),
-              zoomControlsEnabled: false,
-              onMapCreated: (GoogleMapController controller) {},
             ),
-          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +297,7 @@ class _State extends State<PageEntryPoint> {
                                 child: new Icon(Icons.directions_walk),
                               ),
                               TextSpan(
-                                text: " 12 km",
+                                text: '${totalDistance.toStringAsFixed(2)} km',
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: Color.fromARGB(255, 0, 0, 0),
@@ -172,8 +330,7 @@ class _State extends State<PageEntryPoint> {
                       ),
                     ],
                   ),
-                  child:
-                      Text("07 Đống Đa, P. Thắng Lợi, TP. Kon Tum, Kon Tum")),
+                  child: Text('${order.address}')),
               Container(
                 padding:
                     const EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
@@ -203,7 +360,7 @@ class _State extends State<PageEntryPoint> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Kết thúc: 21/11/2021',
+                            'Thời gian giao: ${dateFormat.format(order.dueDate)}',
                             style: defautText(color: 0xFF6886C5),
                             textAlign: TextAlign.left,
                             maxLines: 1,
@@ -236,7 +393,7 @@ class _State extends State<PageEntryPoint> {
                                     children: <Widget>[
                                       // ignore: prefer_const_constructors
                                       Text(
-                                        "Nguyên Khoa",
+                                        '${order.name}',
                                         // ignore: prefer_const_constructors
                                         style: TextStyle(
                                             color: Colors.black,
@@ -246,7 +403,7 @@ class _State extends State<PageEntryPoint> {
                                       SizedBox(height: 5),
                                       // ignore: prefer_const_constructors
                                       Text(
-                                        'SĐT: ${"0123456789"}',
+                                        'SĐT: ${order.phone}',
                                         // ignore: prefer_const_constructors
                                         style: TextStyle(
                                             color: Colors.black,
@@ -264,52 +421,7 @@ class _State extends State<PageEntryPoint> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    '${"Sản phẩm 1"}',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 14.0),
-                                  )),
-                              Text("12"),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: [
-                              Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    '${"Sản phẩm 1"}',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 14.0),
-                                  )),
-                              Text("12"),
-                            ],
-                          ),
-                        ),
-                      ),
+                      productList(order.products)
                     ],
                   ),
                 ),
@@ -352,54 +464,18 @@ class _State extends State<PageEntryPoint> {
                 ]),
               ),
             ],
-          )
+          ),
+          if (isLoading == true)
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Color(0xFFFFFFFF),
+              ),
+              child: Center(child: Text("Loading...")),
+            )
         ],
       ),
     );
-  }
-
-  Set<Marker> getmarkers() {
-    //markers to place on map
-    setState(() {
-      markers.add(Marker(
-        //add first marker
-        markerId: MarkerId(showLocation.toString()),
-        position: showLocation, //position of marker
-        infoWindow: InfoWindow(
-          //popup info
-          title: 'Marker Title First ',
-          snippet: 'My Custom Subtitle',
-        ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
-
-      markers.add(Marker(
-        //add second marker
-        markerId: MarkerId(showLocation.toString()),
-        position: LatLng(27.7099116, 85.3132343), //position of marker
-        infoWindow: InfoWindow(
-          //popup info
-          title: 'Marker Title Second ',
-          snippet: 'My Custom Subtitle',
-        ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
-
-      markers.add(Marker(
-        //add third marker
-        markerId: MarkerId(showLocation.toString()),
-        position: LatLng(27.7137735, 85.315626), //position of marker
-        infoWindow: InfoWindow(
-          //popup info
-          title: 'Marker Title Third ',
-          snippet: 'My Custom Subtitle',
-        ),
-        icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-      ));
-
-      //add more markers here
-    });
-
-    return markers;
   }
 }
