@@ -3,6 +3,7 @@
 import 'package:android_midterm/logic/fetch_debt_or_bill.dart';
 import 'package:android_midterm/models/debt_model.dart';
 import 'package:android_midterm/routes/app_router.gr.dart';
+import 'package:android_midterm/utils/currency_util.dart';
 import 'package:android_midterm/widgets/debt_log_card.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -28,40 +29,51 @@ class DebtLogScreen extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Tổng cho nợ',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        SizedBox(height: 5),
-                        Text('4.899.000đ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                                color: Colors.green))
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Tổng tôi nợ',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        SizedBox(height: 5),
-                        Text('100.000đ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                                color: Colors.red))
-                      ],
-                    ),
-                  ],
+                FutureBuilder<List<int>>(
+                  future: Future.wait([
+                    calculateTotal(false),
+                    calculateTotal(true),
+                  ]),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Tổng cho nợ',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(formatMoney(snapshot.data![0]),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                      color: Colors.green))
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Tổng tôi nợ',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(formatMoney(snapshot.data![1]),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                      color: Colors.red))
+                            ],
+                          ),
+                        ],
+                      );
+                    }
+                    return Container();
+                  },
                 ),
               ],
             ),
@@ -75,6 +87,8 @@ class DebtLogScreen extends StatelessWidget {
                   final data = snapshot.data;
                   return Expanded(
                       child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          shrinkWrap: true,
                           children: data!.entries
                               .map((e) => GestureDetector(
                                     onTap: () {
