@@ -340,6 +340,7 @@ class _State extends State<DebtScreen> {
                                 debt.update(debtId, uid,
                                     {"enable": false}).then((result) {
                                   setState(() {});
+                                  context.router.pushNamed('/dashboard');
                                 });
                               },
                         child: Container(

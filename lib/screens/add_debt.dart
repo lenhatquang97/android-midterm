@@ -1,8 +1,10 @@
 import 'package:android_midterm/models/debt_model.dart';
+import 'package:android_midterm/utils/user_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:auto_route/auto_route.dart';
 
 class AddDebt extends StatefulWidget {
   const AddDebt({Key? key}) : super(key: key);
@@ -231,6 +233,8 @@ class _AddDebtState extends State<AddDebt> {
                         constraints: const BoxConstraints.tightFor(height: 50),
                         child: ElevatedButton(
                           onPressed: () async {
+                            String uid = await SecureStorage.readSecureData(
+                                SecureStorage.userID);
                             var name = _name_controller.text;
                             var amount = int.parse(_amount_controller.text);
                             var note = _desc_controller.text;
@@ -247,10 +251,9 @@ class _AddDebtState extends State<AddDebt> {
                                 name: name,
                                 note: note,
                                 phone: phone,
-                                createdBy: "test");
+                                createdBy: uid);
                             await object.CreateDebt();
-
-                            Navigator.pop(context);
+                            context.router.pushNamed('/dashboard');
                           },
                           child: const Text("Lưu"),
                           style: ButtonStyle(

@@ -37,7 +37,7 @@ class OrderProvider extends ChangeNotifier {
     data["location"] = location;
     data["address"] = address;
     data["enable"] = true;
-    data["createdBy"] = createdBy;
+    data["created_by"] = createdBy;
     data["products"] = [];
     for (var i = 0; i < _list_item.length; i++) {
       var temp = {"name": _list_item[i].item_name, "qua": _list_item[i].amount};

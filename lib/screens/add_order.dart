@@ -2,11 +2,13 @@ import 'package:android_midterm/models/item.dart';
 import 'package:android_midterm/provider/order_provider.dart';
 import 'package:android_midterm/provider/picker_provider.dart';
 import 'package:android_midterm/screens/map_picker_v2.dart';
+import 'package:android_midterm/utils/user_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_route/auto_route.dart';
 
 class AddOrder extends StatefulWidget {
   const AddOrder({Key? key}) : super(key: key);
@@ -37,6 +39,7 @@ class _AddOrderState extends State<AddOrder> {
     // ignore: non_constant_identifier_names
     var _list_item = _order_provider.list_item;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(
@@ -51,253 +54,258 @@ class _AddOrderState extends State<AddOrder> {
           "Order Details",
         ),
       ),
-      body: Column(
-        children: [
-          Column(
-            children: [
-              const SizedBox(height: 5),
-              TextField(
-                controller: _name_controller,
-                textAlignVertical: const TextAlignVertical(y: 0.5),
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Name',
-                    hintStyle: TextStyle(fontSize: 16),
-                    prefixIcon: Icon(Icons.person)),
-              ),
-              const SizedBox(height: 10),
-              Divider(thickness: 20, color: Colors.grey.shade300),
-            ],
-          ),
-          Column(
-            children: [
-              const SizedBox(height: 5),
-              TextField(
-                controller: _phone_controller,
-                textAlignVertical: const TextAlignVertical(y: 0.5),
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Phone number',
-                    hintStyle: TextStyle(fontSize: 16),
-                    prefixIcon: Icon(Icons.phone)),
-              ),
-              const SizedBox(height: 10),
-              Divider(thickness: 20, color: Colors.grey.shade300),
-            ],
-          ),
-          Column(
-            children: [
-              const SizedBox(height: 5),
-              TextField(
-                controller: _desc_controller,
-                textAlignVertical: const TextAlignVertical(y: 0.5),
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Description (Optional)',
-                    hintStyle: TextStyle(fontSize: 16),
-                    prefixIcon: Icon(Icons.description)),
-              ),
-              const SizedBox(height: 10),
-            ],
-          ),
-          Column(
-            children: [
-              Divider(
-                thickness: 20,
-                color: Colors.grey.shade300,
-              ),
-              Container(
-                constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height / 3),
-                child: ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _list_item.length,
-                  itemBuilder: (_, index) => ItemWidget(
-                      item: _list_item[index],
-                      index: index,
-                      isLastItem: index == _list_item.length - 1,
-                      orderProvider: _order_provider,
-                      itemNameController: _item_name_controller,
-                      amountController: _amount_controller,
-                      formKey: _form_key),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Column(
+              children: [
+                const SizedBox(height: 5),
+                TextField(
+                  controller: _name_controller,
+                  textAlignVertical: const TextAlignVertical(y: 0.5),
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Name',
+                      hintStyle: TextStyle(fontSize: 16),
+                      prefixIcon: Icon(Icons.person)),
                 ),
-              ),
-              _list_item.isNotEmpty
-                  ? Divider(
-                      thickness: 20,
-                      color: Colors.grey.shade300,
-                    )
-                  : const SizedBox(),
-            ],
-          ),
-          Column(
-            children: [
-              ElevatedButton(
-                  // ignore: void_checks
-                  onPressed: () {
-                    Alert(
-                        context: context,
-                        title: "Add item",
-                        content: Column(
-                          children: [
-                            AddItemField(
-                              item_name_field_controller: _item_name_controller,
-                              amount_field_controller: _amount_controller,
-                              form_key: _form_key,
-                            ),
-                          ],
-                        ),
-                        buttons: [
-                          DialogButton(
-                              child: const Text("Save"),
-                              onPressed: () {
-                                if (_form_key.currentState!.validate()) {
-                                  _order_provider.AddItem(
-                                    ItemOrder(
-                                        _item_name_controller.text.toString(),
-                                        int.parse(_amount_controller.text
-                                            .toString())),
-                                  );
-                                  Navigator.pop(context);
-                                }
-                              }),
-                          DialogButton(
-                              child: const Text("Cancel"),
-                              onPressed: () => Navigator.pop(context))
-                        ]).show();
-                    _item_name_controller.clear();
-                    _amount_controller.clear();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                const SizedBox(height: 10),
+                Divider(thickness: 20, color: Colors.grey.shade300),
+              ],
+            ),
+            Column(
+              children: [
+                const SizedBox(height: 5),
+                TextField(
+                  controller: _phone_controller,
+                  textAlignVertical: const TextAlignVertical(y: 0.5),
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Phone number',
+                      hintStyle: TextStyle(fontSize: 16),
+                      prefixIcon: Icon(Icons.phone)),
+                ),
+                const SizedBox(height: 10),
+                Divider(thickness: 20, color: Colors.grey.shade300),
+              ],
+            ),
+            Column(
+              children: [
+                const SizedBox(height: 5),
+                TextField(
+                  controller: _desc_controller,
+                  textAlignVertical: const TextAlignVertical(y: 0.5),
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Description (Optional)',
+                      hintStyle: TextStyle(fontSize: 16),
+                      prefixIcon: Icon(Icons.description)),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+            Column(
+              children: [
+                Divider(
+                  thickness: 20,
+                  color: Colors.grey.shade300,
+                ),
+                Container(
+                  constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height / 3),
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _list_item.length,
+                    itemBuilder: (_, index) => ItemWidget(
+                        item: _list_item[index],
+                        index: index,
+                        isLastItem: index == _list_item.length - 1,
+                        orderProvider: _order_provider,
+                        itemNameController: _item_name_controller,
+                        amountController: _amount_controller,
+                        formKey: _form_key),
                   ),
-                  child: SizedBox(
-                    height: 60,
-                    child: Row(
-                      children: [
-                        Column(
-                          children: const [
-                            SizedBox(height: 15),
-                            Icon(
-                              Icons.add_circle,
-                              color: Colors.blue,
-                              size: 25,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          children: const [
-                            SizedBox(
-                              height: 18,
-                            ),
-                            Text(
-                              "Add item",
-                              textAlign: TextAlign.justify,
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ],
+                ),
+                _list_item.isNotEmpty
+                    ? Divider(
+                        thickness: 20,
+                        color: Colors.grey.shade300,
+                      )
+                    : const SizedBox(),
+              ],
+            ),
+            Column(
+              children: [
+                ElevatedButton(
+                    // ignore: void_checks
+                    onPressed: () {
+                      Alert(
+                          context: context,
+                          title: "Add item",
+                          content: Column(
+                            children: [
+                              AddItemField(
+                                item_name_field_controller:
+                                    _item_name_controller,
+                                amount_field_controller: _amount_controller,
+                                form_key: _form_key,
+                              ),
+                            ],
+                          ),
+                          buttons: [
+                            DialogButton(
+                                child: const Text("Save"),
+                                onPressed: () {
+                                  if (_form_key.currentState!.validate()) {
+                                    _order_provider.AddItem(
+                                      ItemOrder(
+                                          _item_name_controller.text.toString(),
+                                          int.parse(_amount_controller.text
+                                              .toString())),
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                                }),
+                            DialogButton(
+                                child: const Text("Cancel"),
+                                onPressed: () => Navigator.pop(context))
+                          ]).show();
+                      _item_name_controller.clear();
+                      _amount_controller.clear();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
                     ),
-                  )),
-              Divider(
-                thickness: 20,
-                color: Colors.grey.shade300,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MapScreen()));
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shadowColor: MaterialStateProperty.all(Colors.transparent),
-                  ),
-                  child: SizedBox(
-                    height: 60,
-                    child: Row(
-                      children: [
-                        Column(
-                          children: const [
-                            SizedBox(height: 15),
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.blue,
-                              size: 25,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          children: [
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            Text(
-                              _picker_provider.current_location.name.isEmpty
-                                  ? "Choose location"
-                                  : _picker_provider.current_location.name,
-                              textAlign: TextAlign.justify,
-                              style: const TextStyle(
-                                  color: Colors.blue, fontSize: 16),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),
-              Divider(
-                thickness: 20,
-                color: Colors.grey.shade300,
-              )
-            ],
-          ),
-          const Expanded(
-            child: SizedBox(),
-          ),
-          Row(
-            children: [
-              const SizedBox(width: 10),
-              Expanded(
-                child: ConstrainedBox(
-                    constraints: const BoxConstraints.tightFor(height: 50),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        var name = _name_controller.text;
-                        var phone = _phone_controller.text;
-                        var note = _desc_controller.text;
-                        await _order_provider.SaveOrder(
-                            name,
-                            phone,
-                            note,
-                            GeoPoint(_picker_provider.current_location.lat,
-                                _picker_provider.current_location.lng),
-                            _picker_provider.current_location.formattedAddress,
-                            "test");
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Lưu"),
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(15)))),
+                    child: SizedBox(
+                      height: 60,
+                      child: Row(
+                        children: [
+                          Column(
+                            children: const [
+                              SizedBox(height: 15),
+                              Icon(
+                                Icons.add_circle,
+                                color: Colors.blue,
+                                size: 25,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            children: const [
+                              SizedBox(
+                                height: 18,
+                              ),
+                              Text(
+                                "Add item",
+                                textAlign: TextAlign.justify,
+                                style:
+                                    TextStyle(color: Colors.blue, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     )),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 30,
-          )
-        ],
+                Divider(
+                  thickness: 20,
+                  color: Colors.grey.shade300,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MapScreen()));
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                    ),
+                    child: SizedBox(
+                      height: 60,
+                      child: Row(
+                        children: [
+                          Column(
+                            children: const [
+                              SizedBox(height: 15),
+                              Icon(
+                                Icons.location_on,
+                                color: Colors.blue,
+                                size: 25,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: 18,
+                              ),
+                              Text(
+                                _picker_provider.current_location.name.isEmpty
+                                    ? "Choose location"
+                                    : _picker_provider.current_location.name,
+                                textAlign: TextAlign.justify,
+                                style: const TextStyle(
+                                    color: Colors.blue, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+                Divider(
+                  thickness: 20,
+                  color: Colors.grey.shade300,
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ConstrainedBox(
+                      constraints: const BoxConstraints.tightFor(height: 50),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          String uid = await SecureStorage.readSecureData(
+                              SecureStorage.userID);
+                          var name = _name_controller.text;
+                          var phone = _phone_controller.text;
+                          var note = _desc_controller.text;
+                          await _order_provider.SaveOrder(
+                              name,
+                              phone,
+                              note,
+                              GeoPoint(_picker_provider.current_location.lat,
+                                  _picker_provider.current_location.lng),
+                              _picker_provider
+                                  .current_location.formattedAddress,
+                              uid);
+                          context.router.pushNamed('/dashboard');
+                        },
+                        child: const Text("Lưu"),
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)))),
+                      )),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 30,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -357,7 +365,7 @@ class ItemWidget extends StatelessWidget {
                             index);
                         itemNameController.clear();
                         amountController.clear();
-                        Navigator.pop(context);
+                        context.router.pop();
                       }
                     }),
                 DialogButton(
@@ -366,7 +374,7 @@ class ItemWidget extends StatelessWidget {
                       orderProvider.DeleteItem(index);
                       itemNameController.clear();
                       amountController.clear();
-                      Navigator.pop(context);
+                      context.router.pop();
                     })
               ]).show();
         },
