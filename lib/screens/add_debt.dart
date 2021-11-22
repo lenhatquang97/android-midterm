@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddDebt extends StatefulWidget {
   const AddDebt({Key? key}) : super(key: key);
@@ -59,145 +60,157 @@ class _AddDebtState extends State<AddDebt> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              Center(
-                child: Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(children: [
-                      Text("KHOẢN GHI NGÀY", style: TextStyle(fontSize: 30)),
-                      RichText(
-                        text: TextSpan(
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 16),
-                            children: [
-                              TextSpan(
-                                text: _date_time.day.toString() +
-                                    "/" +
-                                    _date_time.month.toString() +
-                                    "/" +
-                                    _date_time.year.toString(),
-                                style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 20,
-                                    decoration: TextDecoration.underline),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2001),
-                                            lastDate: DateTime(2222))
-                                        .then(
-                                            (date) => {_set_date_time(date!)});
-                                  },
-                              )
-                            ]),
-                      ),
-                    ])),
-              ),
-              const SizedBox(height: 30),
-              Center(
-                child: Container(
-                  height: 60,
-                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: ConstrainedBox(
-                          constraints:
-                              const BoxConstraints.tightFor(height: 50),
-                          child: ElevatedButton(
-                            onPressed: _left_button_click,
-                            child: const Text(
-                              'Tôi cho nợ',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                                shadowColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                                backgroundColor: _button_index
-                                    ? MaterialStateProperty.all(
-                                        Colors.green[400])
-                                    : MaterialStateProperty.all(Colors.grey),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ))),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        flex: 1,
-                        child: ConstrainedBox(
-                          constraints:
-                              const BoxConstraints.tightFor(height: 50),
-                          child: ElevatedButton(
-                            onPressed: _right_button_click,
-                            child: const Text(
-                              "Tôi nợ",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                                shadowColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                                backgroundColor: !_button_index
-                                    ? MaterialStateProperty.all(Colors.red[400])
-                                    : MaterialStateProperty.all(Colors.grey),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ))),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 5)
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
               Expanded(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      textAlignVertical: const TextAlignVertical(y: 0.5),
-                      decoration: InputDecoration(
-                          hintText:
-                              _button_index ? "Tên người nợ" : "Tên chủ nợ",
-                          prefixIcon: const Icon(Icons.person)),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    Center(
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(children: [
+                            Text("KHOẢN GHI NGÀY",
+                                style: GoogleFonts.montserrat(
+                                    textStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 30,
+                                  fontStyle: FontStyle.normal,
+                                  decoration: TextDecoration.none,
+                                ))),
+                            const SizedBox(height: 10),
+                            RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: _date_time.day.toString() +
+                                      "/" +
+                                      _date_time.month.toString() +
+                                      "/" +
+                                      _date_time.year.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.blue, fontSize: 25),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2001),
+                                              lastDate: DateTime(2222))
+                                          .then((date) =>
+                                              {_set_date_time(date!)});
+                                    },
+                                )
+                              ]),
+                            ),
+                          ])),
                     ),
-                    TextFormField(
-                      textAlignVertical: const TextAlignVertical(y: 0.5),
-                      decoration: const InputDecoration(
-                          hintText: 'Số tiền',
-                          prefixIcon: Icon(Icons.attach_money)),
+                    const SizedBox(height: 15),
+                    Center(
+                      child: Container(
+                        height: 60,
+                        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints.tightFor(height: 50),
+                                child: ElevatedButton(
+                                  onPressed: _left_button_click,
+                                  child: const Text(
+                                    'Tôi cho nợ',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  style: ButtonStyle(
+                                      shadowColor: MaterialStateProperty.all(
+                                          Colors.transparent),
+                                      backgroundColor: _button_index
+                                          ? MaterialStateProperty.all(
+                                              Colors.green[400])
+                                          : MaterialStateProperty.all(
+                                              Colors.grey),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ))),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              flex: 1,
+                              child: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints.tightFor(height: 50),
+                                child: ElevatedButton(
+                                  onPressed: _right_button_click,
+                                  child: const Text(
+                                    "Tôi nợ",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  style: ButtonStyle(
+                                      shadowColor: MaterialStateProperty.all(
+                                          Colors.transparent),
+                                      backgroundColor: !_button_index
+                                          ? MaterialStateProperty.all(
+                                              Colors.red[400])
+                                          : MaterialStateProperty.all(
+                                              Colors.grey),
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ))),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 5)
+                          ],
+                        ),
+                      ),
                     ),
-                    const TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      textAlignVertical: TextAlignVertical(y: 0.5),
-                      decoration: InputDecoration(
-                          hintText: 'Mô tả',
-                          prefixIcon: Icon(Icons.description)),
+                    const SizedBox(height: 30),
+                    Column(
+                      children: [
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
+                          textAlignVertical: const TextAlignVertical(y: 0.5),
+                          decoration: InputDecoration(
+                              hintText:
+                                  _button_index ? "Tên người nợ" : "Tên chủ nợ",
+                              prefixIcon: const Icon(Icons.person)),
+                        ),
+                        TextFormField(
+                          textAlignVertical: const TextAlignVertical(y: 0.5),
+                          decoration: const InputDecoration(
+                              hintText: 'Số tiền',
+                              prefixIcon: Icon(Icons.attach_money)),
+                        ),
+                        const TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          textAlignVertical: TextAlignVertical(y: 0.5),
+                          decoration: InputDecoration(
+                              hintText: 'Mô tả',
+                              prefixIcon: Icon(Icons.description)),
+                        ),
+                        TextFormField(
+                          textAlignVertical: const TextAlignVertical(y: 0.5),
+                          decoration: const InputDecoration(
+                              hintText: 'Số điện thoại',
+                              prefixIcon: Icon(Icons.phone)),
+                        ),
+                      ],
                     ),
-                    TextFormField(
-                      textAlignVertical: const TextAlignVertical(y: 0.5),
-                      decoration: const InputDecoration(
-                          hintText: 'Số điện thoại',
-                          prefixIcon: Icon(Icons.phone)),
-                    ),
-                  ],
+                  ]),
                 ),
               ),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   const SizedBox(width: 10),
