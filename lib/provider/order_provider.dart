@@ -33,7 +33,7 @@ class OrderProvider extends ChangeNotifier {
       GeoPoint location, String address, String createdBy) async {
     var data = <String, dynamic>{};
     data["name"] = name;
-    data["phone"] = phone;
+    data["phone_number"] = phone;
     data["location"] = location;
     data["address"] = address;
     data["enable"] = true;

@@ -52,6 +52,7 @@ class OrderModel {
   }
 
   OrderModel.fromJson(Map<String, dynamic> json) {
+    print(json);
     address = json['address'] as String;
     createdBy = json['created_by'] as String;
     dueDate = (json['due_date'] as Timestamp).toDate();
