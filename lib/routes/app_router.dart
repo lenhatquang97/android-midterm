@@ -1,3 +1,5 @@
+import 'package:android_midterm/screens/add_debt.dart';
+import 'package:android_midterm/screens/add_order.dart';
 import 'package:android_midterm/screens/authentication/sign_in_screen.dart';
 import 'package:android_midterm/screens/authentication/sign_up_screen.dart';
 import 'package:android_midterm/screens/dashboard_screen.dart';
@@ -37,5 +39,7 @@ import 'package:auto_route/annotations.dart';
     path: '/order-detail',
     page: OrderScreen,
   ),
+  AutoRoute(path: '/add-debt', page: AddDebt),
+  AutoRoute(path: '/add-order', page: AddOrder)
 ])
 class $AppRouter {}
