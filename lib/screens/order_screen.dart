@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
 
+import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show PlaceholderAlignment;
@@ -14,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:intl/intl.dart';
 import 'package:auto_route/auto_route.dart';
+import 'add_order.dart' as ao;
 
 DateFormat dateFormat = DateFormat("HH:mm dd-MM-yyyy");
 final firestoreInstance = FirebaseFirestore.instance;
@@ -448,10 +450,16 @@ class _State extends State<OrderScreen> {
                             onPressed: !order.enable
                                 ? null
                                 : () {
-                                    order.update(orderId, uid,
-                                        {"enable": false}).then((result) {
-                                      setState(() {});
-                                    });
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ao.AddOrder(
+                                                  docs_id: orderId,
+                                                )));
+                                    // order.update(orderId, uid,
+                                    //     {"enable": false}).then((result) {
+                                    //   setState(() {});
+                                    // });
                                   },
                             child: Container(
                                 height: 50,
