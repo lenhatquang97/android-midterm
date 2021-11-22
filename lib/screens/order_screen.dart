@@ -143,7 +143,7 @@ class _State extends State<OrderScreen> {
     // Generating the list of coordinates to be used for
     // drawing the polylines
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "AIzaSyBKIDtv0IA8gwYbYBdrAuiCRuQ231vpf2E", // Google Maps API Key
+      "AIzaSyA7eJkKK0Zp_mziFO_Gb-9OsdK99jYXx-A", // Google Maps API Key
       PointLatLng(startLatitude, startLongitude),
       PointLatLng(destinationLatitude, destinationLongitude),
     );
