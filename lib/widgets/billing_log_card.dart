@@ -6,13 +6,14 @@ class BillingLogCard extends StatelessWidget {
   const BillingLogCard({Key? key, required this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    String allProductNames = model.products.map((e) => e.name).join(',');
+    String allProductNames = model.products.map((e) => e.name).join(', ');
     return Card(
+        elevation: 5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
