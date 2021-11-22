@@ -211,7 +211,7 @@ class _State extends State<DebtScreen> {
                                         children: <Widget>[
                                           // ignore: prefer_const_constructors
                                           Text(
-                                            "Nguyên Khoa",
+                                            debt.name,
                                             // ignore: prefer_const_constructors
                                             style: TextStyle(
                                                 color: Colors.black,
@@ -221,7 +221,7 @@ class _State extends State<DebtScreen> {
                                           SizedBox(height: 5),
                                           // ignore: prefer_const_constructors
                                           Text(
-                                            'SĐT: ${"0123456789"}',
+                                            'SĐT: ${debt.phone}',
                                             // ignore: prefer_const_constructors
                                             style: TextStyle(
                                                 color: Colors.black,
