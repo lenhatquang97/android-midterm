@@ -1,3 +1,4 @@
+import 'package:android_midterm/models/debt_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,6 +16,10 @@ class _AddDebtState extends State<AddDebt> {
   DateTime _date_time = DateTime.now();
   // ignore: non_constant_identifier_names
   bool _button_index = true; //true == left false == right
+  final _name_controller = TextEditingController();
+  final _amount_controller = TextEditingController();
+  final _desc_controller = TextEditingController();
+  final _phone_controller = TextEditingController();
 
   // ignore: non_constant_identifier_names
   void _set_date_time(DateTime a) {
@@ -173,6 +178,7 @@ class _AddDebtState extends State<AddDebt> {
                     Column(
                       children: [
                         TextFormField(
+                          controller: _name_controller,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter some text';
@@ -186,20 +192,25 @@ class _AddDebtState extends State<AddDebt> {
                               prefixIcon: const Icon(Icons.person)),
                         ),
                         TextFormField(
+                          controller: _amount_controller,
+                          keyboardType: TextInputType.number,
                           textAlignVertical: const TextAlignVertical(y: 0.5),
                           decoration: const InputDecoration(
                               hintText: 'Số tiền',
                               prefixIcon: Icon(Icons.attach_money)),
                         ),
-                        const TextField(
+                        TextField(
+                          controller: _desc_controller,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
-                          textAlignVertical: TextAlignVertical(y: 0.5),
-                          decoration: InputDecoration(
+                          textAlignVertical: const TextAlignVertical(y: 0.5),
+                          decoration: const InputDecoration(
                               hintText: 'Mô tả',
                               prefixIcon: Icon(Icons.description)),
                         ),
                         TextFormField(
+                          controller: _phone_controller,
+                          keyboardType: TextInputType.phone,
                           textAlignVertical: const TextAlignVertical(y: 0.5),
                           decoration: const InputDecoration(
                               hintText: 'Số điện thoại',
@@ -219,10 +230,29 @@ class _AddDebtState extends State<AddDebt> {
                     child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(height: 50),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            var name = _name_controller.text;
+                            var amount = int.parse(_amount_controller.text);
+                            var note = _desc_controller.text;
+                            var phone = _phone_controller.text;
+                            if (note.isEmpty) {
+                              note = "";
+                            }
+                            var object = DebtModel(
+                                amount: amount,
+                                dueDate: _date_time,
+                                createdAt: DateTime.now(),
+                                enable: true,
+                                isDebt: !_button_index,
+                                name: name,
+                                note: note,
+                                phone: phone,
+                                createdBy: "test");
+                            await object.CreateDebt();
+
                             Navigator.pop(context);
                           },
-                          child: const Text("Luu"),
+                          child: const Text("Lưu"),
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
