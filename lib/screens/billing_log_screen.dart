@@ -1,4 +1,5 @@
 import 'package:android_midterm/models/debt_model.dart';
+import 'package:android_midterm/screens/add_order.dart';
 import 'package:android_midterm/widgets/billing_log_card.dart';
 import 'package:android_midterm/widgets/debt_log_card.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,12 @@ class BillingLogScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddOrder()));
+                  },
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

@@ -1,5 +1,7 @@
 import 'package:android_midterm/models/debt_model.dart';
+import 'package:android_midterm/screens/add_debt.dart';
 import 'package:android_midterm/widgets/debt_log_card.dart';
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
 //Create a screen with ListView of DebtLog
@@ -92,7 +94,12 @@ class DebtLogScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddDebt()));
+                  },
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

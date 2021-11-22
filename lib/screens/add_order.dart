@@ -32,8 +32,14 @@ class _AddOrderState extends State<AddOrder> {
     var _list_item = _order_provider.list_item;
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(
-          Icons.arrow_back,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: const Text(
           "Order Details",
@@ -221,7 +227,10 @@ class _AddOrderState extends State<AddOrder> {
                 child: ConstrainedBox(
                     constraints: const BoxConstraints.tightFor(height: 50),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                        print('poped');
+                      },
                       child: const Text("Luu"),
                       style: ButtonStyle(
                           shape:
