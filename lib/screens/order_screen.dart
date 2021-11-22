@@ -218,278 +218,282 @@ class _State extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          if (isLoading == false)
-            Container(
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width,
-              child: GoogleMap(
-                initialCameraPosition: cp,
-                myLocationEnabled: true,
-                polylines: Set<Polyline>.of(polylines.values),
-                markers: markers,
-                zoomControlsEnabled: false,
-                onMapCreated: (GoogleMapController controller) {
-                  mapController = controller;
-                },
-              ),
-            ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(true),
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 20.0, top: 10.0),
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          color: Color(0xFFFFFFFF),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 10, // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              WidgetSpan(
-                                alignment: ui.PlaceholderAlignment.middle,
-                                child: new Icon(Icons.arrow_back),
-                              ),
-                              TextSpan(
-                                text: " Quay về",
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                  Expanded(child: SizedBox()),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(true),
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 20.0, top: 10.0),
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          color: Color(0xFFFFFFFF),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 10, // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              WidgetSpan(
-                                alignment: ui.PlaceholderAlignment.middle,
-                                child: new Icon(Icons.directions_walk),
-                              ),
-                              TextSpan(
-                                text: '${totalDistance.toStringAsFixed(2)} km',
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Container(
-                  width: 100,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            if (isLoading == false)
+              Container(
+                height: MediaQuery.of(context).size.height / 2,
+                width: MediaQuery.of(context).size.width,
+                child: GoogleMap(
+                  initialCameraPosition: cp,
+                  myLocationEnabled: true,
+                  polylines: Set<Polyline>.of(polylines.values),
+                  markers: markers,
+                  zoomControlsEnabled: false,
+                  onMapCreated: (GoogleMapController controller) {
+                    mapController = controller;
+                  },
                 ),
               ),
-              Container(
-                  margin: const EdgeInsets.all(20),
-                  padding: const EdgeInsets.all(20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(true),
+                      child: Container(
+                          margin: const EdgeInsets.only(left: 20.0, top: 10.0),
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            color: Color(0xFFFFFFFF),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 10, // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: ui.PlaceholderAlignment.middle,
+                                  child: new Icon(Icons.arrow_back),
+                                ),
+                                TextSpan(
+                                  text: " Quay về",
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
+                    Expanded(child: SizedBox()),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(true),
+                      child: Container(
+                          margin: const EdgeInsets.only(left: 20.0, top: 10.0),
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            color: Color(0xFFFFFFFF),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 10, // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  alignment: ui.PlaceholderAlignment.middle,
+                                  child: new Icon(Icons.directions_walk),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '${totalDistance.toStringAsFixed(2)} km',
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    width: 100,
+                  ),
+                ),
+                Container(
+                    margin: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.0),
+                      color: Color(0xFFFFFFFF),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 10, // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Text('${order.address}')),
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
                   width: double.maxFinite,
+                  height: MediaQuery.of(context).size.height * 5 / 10,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0)),
                     color: Color(0xFFFFFFFF),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 10, // changes position of shadow
+                        spreadRadius: 0,
+                        blurRadius: 70,
+                        offset: Offset(0, -15), // changes position of shadow
                       ),
                     ],
                   ),
-                  child: Text('${order.address}')),
-              Container(
-                padding:
-                    const EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
-                width: double.maxFinite,
-                height: MediaQuery.of(context).size.height * 5 / 10,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0)),
-                  color: Color(0xFFFFFFFF),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 70,
-                      offset: Offset(0, -15), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: SingleChildScrollView(
-                  // <-- wrap this around
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .center, //Center Row contents horizontally,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Thời gian giao: ${dateFormat.format(order.dueDate)}',
-                            style: defautText(color: 0xFF6886C5),
-                            textAlign: TextAlign.left,
-                            maxLines: 1,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      GestureDetector(
-                        onTap: () => launch("tel://0123456789"),
-                        child: Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(30),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.brown.shade800,
-                                  child: const Text('NK'),
-                                ),
-                                SizedBox(width: 15),
-                                Expanded(
-                                  flex: 2,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    // ignore: prefer_const_literals_to_create_immutables
-                                    children: <Widget>[
-                                      // ignore: prefer_const_constructors
-                                      Text(
-                                        '${order.name}',
-                                        // ignore: prefer_const_constructors
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 19.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(height: 5),
-                                      // ignore: prefer_const_constructors
-                                      Text(
-                                        'SĐT: ${order.phone}',
-                                        // ignore: prefer_const_constructors
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14.0),
-                                      )
-                                    ],
+                  child: SingleChildScrollView(
+                    // <-- wrap this around
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, //Center Row contents horizontally,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Thời gian giao: ${dateFormat.format(order.dueDate)}',
+                              style: defautText(color: 0xFF6886C5),
+                              textAlign: TextAlign.left,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        GestureDetector(
+                          onTap: () => launch("tel://0123456789"),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(30),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.brown.shade800,
+                                    child: const Text('NK'),
                                   ),
-                                ),
-                                Icon(
-                                  MdiIcons.fromString('phone'),
-                                  color: Color(0xFF6886C5),
-                                ),
-                              ],
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: <Widget>[
+                                        // ignore: prefer_const_constructors
+                                        Text(
+                                          '${order.name}',
+                                          // ignore: prefer_const_constructors
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 19.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 5),
+                                        // ignore: prefer_const_constructors
+                                        Text(
+                                          'SĐT: ${order.phone}',
+                                          // ignore: prefer_const_constructors
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14.0),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Icon(
+                                    MdiIcons.fromString('phone'),
+                                    color: Color(0xFF6886C5),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      productList(order.products)
-                    ],
+                        productList(order.products)
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                  ),
+                  child: Row(children: [
+                    Expanded(
+                        child: ElevatedButton(
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.red),
+                            onPressed: !order.enable
+                                ? null
+                                : () {
+                                    order.update(orderId, uid,
+                                        {"enable": false}).then((result) {
+                                      setState(() {});
+                                    });
+                                  },
+                            child: Container(
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'Chỉnh sửa',
+                                  style: defautText(color: 0xFFFFFFFF),
+                                  textAlign: TextAlign.center,
+                                )))),
+                    SizedBox(width: 15),
+                    Expanded(
+                        child: ElevatedButton(
+                            onPressed: !order.enable
+                                ? null
+                                : () {
+                                    order.update(orderId, uid,
+                                        {"enable": false}).then((result) {
+                                      setState(() {});
+                                    });
+                                  },
+                            child: Container(
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  order.enable ? 'Hoàn tất' : 'Đã hoàn tất',
+                                  style: defautText(color: 0xFFFFFFFF),
+                                  textAlign: TextAlign.center,
+                                )))),
+                  ]),
+                ),
+              ],
+            ),
+            if (isLoading == true)
               Container(
-                padding: const EdgeInsets.all(20),
-                width: double.maxFinite,
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Color(0xFFFFFFFF),
                 ),
-                child: Row(children: [
-                  Expanded(
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
-                          onPressed: !order.enable
-                              ? null
-                              : () {
-                                  order.update(orderId, uid,
-                                      {"enable": false}).then((result) {
-                                    setState(() {});
-                                  });
-                                },
-                          child: Container(
-                              height: 50,
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Chỉnh sửa',
-                                style: defautText(color: 0xFFFFFFFF),
-                                textAlign: TextAlign.center,
-                              )))),
-                  SizedBox(width: 15),
-                  Expanded(
-                      child: ElevatedButton(
-                          onPressed: !order.enable
-                              ? null
-                              : () {
-                                  order.update(orderId, uid,
-                                      {"enable": false}).then((result) {
-                                    setState(() {});
-                                  });
-                                },
-                          child: Container(
-                              height: 50,
-                              alignment: Alignment.center,
-                              child: Text(
-                                order.enable ? 'Hoàn tất' : 'Đã hoàn tất',
-                                style: defautText(color: 0xFFFFFFFF),
-                                textAlign: TextAlign.center,
-                              )))),
-                ]),
-              ),
-            ],
-          ),
-          if (isLoading == true)
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Color(0xFFFFFFFF),
-              ),
-              child: Center(child: Text("Loading...")),
-            )
-        ],
+                child: Center(child: Text("Loading...")),
+              )
+          ],
+        ),
       ),
     );
   }
