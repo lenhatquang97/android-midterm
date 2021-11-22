@@ -21,7 +21,7 @@ class DebtLogCard extends StatelessWidget {
             children: [
               Text(model.isDebt == false ? 'Tôi cho nợ' : 'Tôi nợ',
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 20,
                       color: model.isDebt == false ? Colors.green : Colors.red,
                       decoration: model.enable
                           ? TextDecoration.none
@@ -37,7 +37,7 @@ class DebtLogCard extends StatelessWidget {
                       )),
                   Text(formatMoney(model.amount),
                       style: TextStyle(
-                          fontSize: 25,
+                          fontSize: 20,
                           decoration: model.enable
                               ? TextDecoration.none
                               : TextDecoration.lineThrough,

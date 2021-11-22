@@ -113,12 +113,14 @@ class _AddOrderState extends State<AddOrder> {
           },
         ),
         title: const Text(
-          "Order Details",
+          "Chi tiết đơn đặt hàng",
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
+      body: Column(
+        children: [
+          Expanded(
+              child: SingleChildScrollView(
+                  child: Column(children: [
             Column(
               children: [
                 const SizedBox(height: 5),
@@ -127,7 +129,7 @@ class _AddOrderState extends State<AddOrder> {
                   textAlignVertical: const TextAlignVertical(y: 0.5),
                   decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Name',
+                      hintText: 'Tên người đặt',
                       hintStyle: TextStyle(fontSize: 16),
                       prefixIcon: Icon(Icons.person)),
                 ),
@@ -143,7 +145,7 @@ class _AddOrderState extends State<AddOrder> {
                   textAlignVertical: const TextAlignVertical(y: 0.5),
                   decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Phone number',
+                      hintText: 'Số điện thoại',
                       hintStyle: TextStyle(fontSize: 16),
                       prefixIcon: Icon(Icons.phone)),
                 ),
@@ -159,7 +161,7 @@ class _AddOrderState extends State<AddOrder> {
                   textAlignVertical: const TextAlignVertical(y: 0.5),
                   decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Description (Optional)',
+                      hintText: 'Miêu tả',
                       hintStyle: TextStyle(fontSize: 16),
                       prefixIcon: Icon(Icons.description)),
                 ),
@@ -204,7 +206,7 @@ class _AddOrderState extends State<AddOrder> {
                     onPressed: () {
                       Alert(
                           context: context,
-                          title: "Add item",
+                          title: "Thêm sản phẩm",
                           content: Column(
                             children: [
                               AddItemField(
@@ -217,7 +219,10 @@ class _AddOrderState extends State<AddOrder> {
                           ),
                           buttons: [
                             DialogButton(
-                                child: const Text("Save"),
+                                child: const Text(
+                                  "Lưu",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                 onPressed: () {
                                   if (_form_key.currentState!.validate()) {
                                     _order_provider.AddItem(
@@ -230,7 +235,10 @@ class _AddOrderState extends State<AddOrder> {
                                   }
                                 }),
                             DialogButton(
-                                child: const Text("Cancel"),
+                                child: const Text(
+                                  "Hủy",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                 onPressed: () => Navigator.pop(context))
                           ]).show();
                       _item_name_controller.clear();
@@ -262,7 +270,7 @@ class _AddOrderState extends State<AddOrder> {
                                 height: 18,
                               ),
                               Text(
-                                "Add item",
+                                "Thêm sản phẩm",
                                 textAlign: TextAlign.justify,
                                 style:
                                     TextStyle(color: Colors.blue, fontSize: 16),
@@ -310,7 +318,7 @@ class _AddOrderState extends State<AddOrder> {
                                 padding: const EdgeInsets.only(right: 30.0),
                                 child: Text(
                                   _picker_provider.current_location.name.isEmpty
-                                      ? "Choose location"
+                                      ? "Chọn địa điểm"
                                       : _picker_provider.current_location.name,
                                   maxLines: null,
                                   textAlign: TextAlign.justify,
@@ -411,88 +419,97 @@ class _AddOrderState extends State<AddOrder> {
               color: Colors.grey.shade300,
             ),
             const SizedBox(
-              height: 30,
+              height: 10,
             ),
-            Row(
-              children: [
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ConstrainedBox(
-                      constraints: const BoxConstraints.tightFor(height: 50),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          String uid = await SecureStorage.readSecureData(
-                              SecureStorage.userID);
-                          var name = _name_controller.text;
-                          var phone = _phone_controller.text;
-                          var note = _desc_controller.text;
-                          if (widget.docs_id != null) {
-                            var data = <String, dynamic>{};
-                            data["name"] = name;
-                            data["phone_number"] = phone;
-                            data["location"] = GeoPoint(
-                                _picker_provider.current_location.lat,
-                                _picker_provider.current_location.lng);
-                            data["note"] = note;
-                            data["address"] = _picker_provider
-                                .current_location.formattedAddress;
-                            data["enable"] = object.enable;
-                            String uid = await SecureStorage.readSecureData(
-                                SecureStorage.userID);
-                            data["created_by"] = uid;
-                            data["products"] = [];
-                            data["due_date"] = Timestamp.fromDate(_date_picker);
-                            for (var i = 0; i < _list_item.length; i++) {
-                              var temp = {
-                                "name": _list_item[i].item_name,
-                                "qua": _list_item[i].amount
-                              };
-                              data["products"].add(temp);
-                            }
-                            final firestoreInstance =
-                                FirebaseFirestore.instance;
-                            await firestoreInstance
-                                .collection("donhang")
-                                .doc(widget.docs_id)
-                                .update(data)
-                                .catchError((onError) => print(onError));
-                            _picker_provider.init();
-                            pageNumModel.pageNum = 1;
-                            context.router.pushNamed('/dashboard');
-                            return;
-                          }
-                          await _order_provider.SaveOrder(
-                              name,
-                              phone,
-                              note,
-                              GeoPoint(_picker_provider.current_location.lat,
-                                  _picker_provider.current_location.lng),
-                              _picker_provider
-                                  .current_location.formattedAddress,
-                              uid,
-                              _date_picker);
-                          _picker_provider.init();
-                          pageNumModel.pageNum = 1;
-                          context.router.pushNamed('/dashboard');
-                        },
-                        child: const Text("Lưu"),
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)))),
-                      )),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            )
-          ],
-        ),
+          ]))),
+          GestureDetector(
+              onTap: () async {
+                String uid =
+                    await SecureStorage.readSecureData(SecureStorage.userID);
+                var name = _name_controller.text;
+                var phone = _phone_controller.text;
+                var note = _desc_controller.text;
+                if (widget.docs_id != null) {
+                  var data = <String, dynamic>{};
+                  data["name"] = name;
+                  data["phone_number"] = phone;
+                  data["location"] = GeoPoint(
+                      _picker_provider.current_location.lat,
+                      _picker_provider.current_location.lng);
+                  data["note"] = note;
+                  data["address"] =
+                      _picker_provider.current_location.formattedAddress;
+                  data["enable"] = object.enable;
+                  String uid =
+                      await SecureStorage.readSecureData(SecureStorage.userID);
+                  data["created_by"] = uid;
+                  data["products"] = [];
+                  data["due_date"] = Timestamp.fromDate(_date_picker);
+                  for (var i = 0; i < _list_item.length; i++) {
+                    var temp = {
+                      "name": _list_item[i].item_name,
+                      "qua": _list_item[i].amount
+                    };
+                    data["products"].add(temp);
+                  }
+                  final firestoreInstance = FirebaseFirestore.instance;
+                  await firestoreInstance
+                      .collection("donhang")
+                      .doc(widget.docs_id)
+                      .update(data)
+                      .catchError((onError) => print(onError));
+                  _picker_provider.init();
+                  pageNumModel.pageNum = 1;
+                  context.router.pushNamed('/dashboard');
+                  return;
+                }
+                await _order_provider.SaveOrder(
+                    name,
+                    phone,
+                    note,
+                    GeoPoint(_picker_provider.current_location.lat,
+                        _picker_provider.current_location.lng),
+                    _picker_provider.current_location.formattedAddress,
+                    uid,
+                    _date_picker);
+                _picker_provider.init();
+                pageNumModel.pageNum = 1;
+                context.router.pushNamed('/dashboard');
+              },
+              child: Container(
+                  margin: const EdgeInsets.all(10.0),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.blue,
+                        Colors.blue[200]!,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        offset: Offset(5, 5),
+                        blurRadius: 10,
+                      )
+                    ],
+                  ),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.save, color: Colors.white),
+                          SizedBox(width: 10),
+                          Text('Lưu',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
+                        ],
+                      )))),
+        ],
       ),
     );
   }
@@ -531,7 +548,7 @@ class ItemWidget extends StatelessWidget {
           amountController.text = item.amount.toString();
           Alert(
               context: context,
-              title: "Add item",
+              title: "Thêm sản phẩm",
               content: Column(
                 children: [
                   AddItemField(
@@ -543,7 +560,7 @@ class ItemWidget extends StatelessWidget {
               ),
               buttons: [
                 DialogButton(
-                    child: const Text("Save"),
+                    child: const Text("Lưu"),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         orderProvider.UpdateItem(
@@ -650,7 +667,7 @@ class AddItemField extends StatelessWidget {
               },
               textAlignVertical: const TextAlignVertical(y: 0),
               decoration: const InputDecoration(
-                hintText: 'Item name',
+                hintText: 'Tên sản phẩm',
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.only(left: 15),
               )),
@@ -674,7 +691,7 @@ class AddItemField extends StatelessWidget {
             decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(left: 15),
-              hintText: 'Amount',
+              hintText: 'Số lượng',
             ),
           ),
           const SizedBox(

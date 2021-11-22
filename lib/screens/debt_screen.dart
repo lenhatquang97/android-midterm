@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:android_midterm/models/debt_model.dart';
 
-DateFormat dateFormat = DateFormat("HH:mm dd-MM-yyyy");
+DateFormat dateFormat = DateFormat("dd-MM-yyyy");
 
 TextStyle defautText({int color = 0xFF000000}) {
   return GoogleFonts.nunito(

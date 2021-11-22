@@ -227,50 +227,64 @@ class _AddDebtState extends State<AddDebt> {
                 ),
               ),
               const SizedBox(height: 15),
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Expanded(
-                    flex: 1,
-                    child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(height: 50),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            String uid = await SecureStorage.readSecureData(
-                                SecureStorage.userID);
-                            var name = _name_controller.text;
-                            var amount = int.parse(_amount_controller.text);
-                            var note = _desc_controller.text;
-                            var phone = _phone_controller.text;
-                            if (note.isEmpty) {
-                              note = "";
-                            }
-                            var object = DebtModel(
-                                amount: amount,
-                                dueDate: _date_time,
-                                createdAt: DateTime.now(),
-                                enable: true,
-                                isDebt: !_button_index,
-                                name: name,
-                                note: note,
-                                phone: phone,
-                                createdBy: uid);
-                            await object.CreateDebt();
-                            pageNumModel.pageNum = 0;
-                            context.router.pushNamed('/dashboard');
-                          },
-                          child: const Text("Lưu"),
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(15)))),
-                        )),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-              ),
+              GestureDetector(
+                  onTap: () async {
+                    String uid = await SecureStorage.readSecureData(
+                        SecureStorage.userID);
+                    var name = _name_controller.text;
+                    var amount = int.parse(_amount_controller.text);
+                    var note = _desc_controller.text;
+                    var phone = _phone_controller.text;
+                    if (note.isEmpty) {
+                      note = "";
+                    }
+                    var object = DebtModel(
+                        amount: amount,
+                        dueDate: _date_time,
+                        createdAt: DateTime.now(),
+                        enable: true,
+                        isDebt: !_button_index,
+                        name: name,
+                        note: note,
+                        phone: phone,
+                        createdBy: uid);
+                    await object.CreateDebt();
+                    pageNumModel.pageNum = 0;
+                    context.router.pushNamed('/dashboard');
+                  },
+                  child: Container(
+                      margin: const EdgeInsets.all(10.0),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.blue,
+                            Colors.blue[200]!,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.add, color: Colors.white),
+                              SizedBox(width: 10),
+                              Text('Lưu',
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.white)),
+                            ],
+                          )))),
             ],
           ),
         ));

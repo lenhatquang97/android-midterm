@@ -18,15 +18,19 @@ class BillingLogScreen extends StatefulWidget {
 class _BillingLogScreenState extends State<BillingLogScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xfff0f0f5),
+        body: Padding(
           padding: const EdgeInsets.all(15.0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text(
-              'Đơn hàng',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+              child: const Text(
+                'Đơn hàng',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
+              ),
             ),
             const SizedBox(height: 10),
             FutureBuilder<Map<String, Map<String, dynamic>>>(
@@ -61,29 +65,46 @@ class _BillingLogScreenState extends State<BillingLogScreen> {
                 }
               },
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ao.AddOrder()));
-                  },
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.add),
-                          SizedBox(width: 10),
-                          Text('Thêm đơn hàng', style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 10),
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ao.AddOrder()));
+                },
+                child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.blue,
+                          Colors.blue[200]!,
                         ],
-                      ))),
-            )
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(5, 5),
+                          blurRadius: 10,
+                        )
+                      ],
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.add, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text('Thêm đơn hàng',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white)),
+                          ],
+                        )))),
           ]),
         ),
       ),

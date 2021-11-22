@@ -16,6 +16,8 @@ class SettingsScreen extends StatelessWidget {
             child: Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,16 +45,15 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(
-            height: 10,
-          ),
-          const SizedBox(
-            height: 10,
+            height: 20,
           ),
           TextButton(
             onPressed: () async {
               await AuthenticationUtils.signOut(context);
             },
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
                 Icon(
                   Icons.logout,

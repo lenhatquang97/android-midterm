@@ -143,6 +143,7 @@ class DebtLogScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 10),
             GestureDetector(
                 onTap: () {
                   Navigator.push(

@@ -244,81 +244,82 @@ class _State extends State<OrderScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(true),
-                      child: Container(
-                          margin: const EdgeInsets.only(left: 20.0, top: 10.0),
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30.0),
-                            color: Color(0xFFFFFFFF),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 10, // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: ui.PlaceholderAlignment.middle,
-                                  child: new Icon(Icons.arrow_back),
-                                ),
-                                TextSpan(
-                                  text: " Quay về",
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(true),
+                        child: Container(
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              color: Color(0xFFFFFFFF),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 10, // changes position of shadow
                                 ),
                               ],
                             ),
-                          )),
-                    ),
-                    Expanded(child: SizedBox()),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(true),
-                      child: Container(
-                          margin: const EdgeInsets.only(left: 20.0, top: 10.0),
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30.0),
-                            color: Color(0xFFFFFFFF),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 10, // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  alignment: ui.PlaceholderAlignment.middle,
-                                  child: new Icon(Icons.directions_walk),
-                                ),
-                                TextSpan(
-                                  text:
-                                      '${totalDistance.toStringAsFixed(2)} km',
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: ui.PlaceholderAlignment.middle,
+                                    child: new Icon(Icons.arrow_back),
+                                  ),
+                                  TextSpan(
+                                    text: " Quay về",
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
                                     ),
                                   ),
+                                ],
+                              ),
+                            )),
+                      ),
+                      Expanded(child: SizedBox()),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(true),
+                        child: Container(
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              color: Color(0xFFFFFFFF),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 10, // changes position of shadow
                                 ),
                               ],
                             ),
-                          )),
-                    ),
-                  ],
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    alignment: ui.PlaceholderAlignment.middle,
+                                    child: new Icon(Icons.directions_walk),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${totalDistance.toStringAsFixed(2)} km',
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: Container(
@@ -345,7 +346,7 @@ class _State extends State<OrderScreen> {
                   padding:
                       const EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
                   width: double.maxFinite,
-                  height: MediaQuery.of(context).size.height * 5 / 10,
+                  height: MediaQuery.of(context).size.height * 4 / 10,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30.0),
