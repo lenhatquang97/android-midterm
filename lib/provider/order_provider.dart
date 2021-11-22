@@ -29,16 +29,24 @@ class OrderProvider extends ChangeNotifier {
   }
 
   // ignore: non_constant_identifier_names
-  Future<void> SaveOrder(String name, String phone, String note,
-      GeoPoint location, String address, String createdBy) async {
+  Future<void> SaveOrder(
+      String name,
+      String phone,
+      String note,
+      GeoPoint location,
+      String address,
+      String createdBy,
+      DateTime due_date) async {
     var data = <String, dynamic>{};
     data["name"] = name;
-    data["phone"] = phone;
+    data["phone_number"] = phone;
     data["location"] = location;
+    data["note"] = note;
     data["address"] = address;
     data["enable"] = true;
     data["created_by"] = createdBy;
     data["products"] = [];
+    data["due_date"] = Timestamp.fromDate(due_date);
     for (var i = 0; i < _list_item.length; i++) {
       var temp = {"name": _list_item[i].item_name, "qua": _list_item[i].amount};
       data["products"].add(temp);

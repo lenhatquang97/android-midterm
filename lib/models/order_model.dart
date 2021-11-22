@@ -28,12 +28,12 @@ class OrderModel {
       if (createdBy == uid) {
         note = data["note"];
         phone = data["phone_number"];
-        dueDate = data["due_date"].toDate();
+        dueDate = (data["due_date"] as Timestamp).toDate();
         location = data["location"];
         address = data["address"];
         name = data["name"];
         enable = data["enable"];
-        List<dynamic> tmp = List.from(data["product"]);
+        List<dynamic> tmp = List.from(data["products"]);
         products = [];
         for (var element in tmp) {
           // print(element['name']);
