@@ -13,6 +13,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:intl/intl.dart';
+import 'package:auto_route/auto_route.dart';
 
 DateFormat dateFormat = DateFormat("HH:mm dd-MM-yyyy");
 final firestoreInstance = FirebaseFirestore.instance;
@@ -243,7 +244,7 @@ class _State extends State<OrderScreen> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.of(context).pop(true),
+                    onTap: () => context.router.pop(),
                     child: Container(
                         margin: const EdgeInsets.only(left: 20.0, top: 10.0),
                         padding: const EdgeInsets.all(15),
@@ -263,7 +264,7 @@ class _State extends State<OrderScreen> {
                             children: [
                               WidgetSpan(
                                 alignment: ui.PlaceholderAlignment.middle,
-                                child: new Icon(Icons.arrow_back),
+                                child: const Icon(Icons.arrow_back),
                               ),
                               TextSpan(
                                 text: " Quay về",
@@ -279,7 +280,7 @@ class _State extends State<OrderScreen> {
                   ),
                   Expanded(child: SizedBox()),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).pop(true),
+                    onTap: () => context.router.pop(),
                     child: Container(
                         margin: const EdgeInsets.only(left: 20.0, top: 10.0),
                         padding: const EdgeInsets.all(15),
@@ -299,7 +300,7 @@ class _State extends State<OrderScreen> {
                             children: [
                               WidgetSpan(
                                 alignment: ui.PlaceholderAlignment.middle,
-                                child: new Icon(Icons.directions_walk),
+                                child: const Icon(Icons.directions_walk),
                               ),
                               TextSpan(
                                 text: '${totalDistance.toStringAsFixed(2)} km',
@@ -335,7 +336,7 @@ class _State extends State<OrderScreen> {
                       ),
                     ],
                   ),
-                  child: Text('${order.address}')),
+                  child: Text(order.address)),
               Container(
                 padding:
                     const EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
@@ -374,7 +375,7 @@ class _State extends State<OrderScreen> {
                       ),
                       SizedBox(height: 15),
                       GestureDetector(
-                        onTap: () => launch("tel://0123456789"),
+                        onTap: () => launch("tel://${order.phone}"),
                         child: Card(
                           elevation: 5,
                           shape: RoundedRectangleBorder(
@@ -386,7 +387,9 @@ class _State extends State<OrderScreen> {
                               children: [
                                 CircleAvatar(
                                   backgroundColor: Colors.brown.shade800,
-                                  child: const Text('NK'),
+                                  child: Text(order.name.isNotEmpty
+                                      ? order.name.substring(0, 1)
+                                      : ""),
                                 ),
                                 SizedBox(width: 15),
                                 Expanded(
@@ -398,7 +401,7 @@ class _State extends State<OrderScreen> {
                                     children: <Widget>[
                                       // ignore: prefer_const_constructors
                                       Text(
-                                        '${order.name}',
+                                        order.name,
                                         // ignore: prefer_const_constructors
                                         style: TextStyle(
                                             color: Colors.black,

@@ -22,15 +22,27 @@ class DebtLogCard extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 20,
                       color: model.isDebt == false ? Colors.green : Colors.red,
+                      decoration: model.enable
+                          ? TextDecoration.none
+                          : TextDecoration.lineThrough,
                       fontWeight: FontWeight.bold)),
               const SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(model.name, style: const TextStyle(fontSize: 20)),
+                  Text(model.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        decoration: model.enable
+                            ? TextDecoration.none
+                            : TextDecoration.lineThrough,
+                      )),
                   Text(formatMoney(model.amount),
                       style: TextStyle(
                         fontSize: 20,
+                        decoration: model.enable
+                            ? TextDecoration.none
+                            : TextDecoration.lineThrough,
                         color:
                             model.isDebt == false ? Colors.green : Colors.red,
                       ))
@@ -39,7 +51,12 @@ class DebtLogCard extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                   '${model.dueDate.day}/${model.dueDate.month}/${model.dueDate.year}',
-                  style: const TextStyle(fontSize: 20))
+                  style: TextStyle(
+                    fontSize: 20,
+                    decoration: model.enable
+                        ? TextDecoration.none
+                        : TextDecoration.lineThrough,
+                  ))
             ],
           ),
         ));

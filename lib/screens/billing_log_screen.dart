@@ -61,19 +61,6 @@ class _BillingLogScreenState extends State<BillingLogScreen> {
                 }
               },
             ),
-            // Expanded(
-            //   child: ListView.builder(
-            //     physics: const AlwaysScrollableScrollPhysics(),
-            //     itemCount: 10,
-            //     shrinkWrap: true,
-            //     itemBuilder: (context, index) {
-            //       return Container(
-            //         margin: const EdgeInsets.symmetric(vertical: 5),
-            //         child: const BillingLogCard(),
-            //       );
-            //     },
-            //   ),
-            // ),
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
