@@ -20,7 +20,7 @@ class OrderModel {
   List<Product> products = [];
   bool enable = true;
   String createdBy = '';
-  OrderModel() {}
+  OrderModel();
   Future<void> fetchOrder(docId, uid) async {
     final firestoreInstance = FirebaseFirestore.instance;
     await firestoreInstance.collection("donhang").doc(docId).get().then((data) {

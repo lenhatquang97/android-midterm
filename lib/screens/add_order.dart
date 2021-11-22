@@ -2,6 +2,7 @@ import 'package:android_midterm/models/item.dart';
 import 'package:android_midterm/provider/order_provider.dart';
 import 'package:android_midterm/provider/picker_provider.dart';
 import 'package:android_midterm/screens/map_picker_v2.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -20,6 +21,11 @@ class _AddOrderState extends State<AddOrder> {
   // ignore: non_constant_identifier_names
   final _amount_controller = TextEditingController();
   // ignore: non_constant_identifier_names
+
+  final _name_controller = TextEditingController();
+  final _phone_controller = TextEditingController();
+  final _desc_controller = TextEditingController();
+
   final _form_key = GlobalKey<FormState>();
 
   @override
@@ -48,17 +54,50 @@ class _AddOrderState extends State<AddOrder> {
       body: Column(
         children: [
           Column(
-            children: const [
-              SizedBox(height: 5),
+            children: [
+              const SizedBox(height: 5),
               TextField(
-                textAlignVertical: TextAlignVertical(y: 0.5),
-                decoration: InputDecoration(
+                controller: _name_controller,
+                textAlignVertical: const TextAlignVertical(y: 0.5),
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Name',
+                    hintStyle: TextStyle(fontSize: 16),
+                    prefixIcon: Icon(Icons.person)),
+              ),
+              const SizedBox(height: 10),
+              Divider(thickness: 20, color: Colors.grey.shade300),
+            ],
+          ),
+          Column(
+            children: [
+              const SizedBox(height: 5),
+              TextField(
+                controller: _phone_controller,
+                textAlignVertical: const TextAlignVertical(y: 0.5),
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Phone number',
+                    hintStyle: TextStyle(fontSize: 16),
+                    prefixIcon: Icon(Icons.phone)),
+              ),
+              const SizedBox(height: 10),
+              Divider(thickness: 20, color: Colors.grey.shade300),
+            ],
+          ),
+          Column(
+            children: [
+              const SizedBox(height: 5),
+              TextField(
+                controller: _desc_controller,
+                textAlignVertical: const TextAlignVertical(y: 0.5),
+                decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Description (Optional)',
                     hintStyle: TextStyle(fontSize: 16),
                     prefixIcon: Icon(Icons.description)),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
           Column(
@@ -227,11 +266,21 @@ class _AddOrderState extends State<AddOrder> {
                 child: ConstrainedBox(
                     constraints: const BoxConstraints.tightFor(height: 50),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        var name = _name_controller.text;
+                        var phone = _phone_controller.text;
+                        var note = _desc_controller.text;
+                        await _order_provider.SaveOrder(
+                            name,
+                            phone,
+                            note,
+                            GeoPoint(_picker_provider.current_location.lat,
+                                _picker_provider.current_location.lng),
+                            _picker_provider.current_location.formattedAddress,
+                            "test");
                         Navigator.pop(context);
-                        print('poped');
                       },
-                      child: const Text("Luu"),
+                      child: const Text("Lưu"),
                       style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -240,7 +289,7 @@ class _AddOrderState extends State<AddOrder> {
                                           BorderRadius.circular(15)))),
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
             ],
