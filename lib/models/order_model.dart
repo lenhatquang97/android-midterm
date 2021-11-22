@@ -60,9 +60,9 @@ class OrderModel {
     name = json['name'] as String;
     note = json['note'] as String;
     phone = json['phone_number'] as String;
-    if (json['product'] != null) {
+    if (json['products'] != null) {
       products = <Product>[];
-      json['product'].forEach((v) {
+      json['products'].forEach((v) {
         products.add(Product.fromJson(v));
       });
     }
