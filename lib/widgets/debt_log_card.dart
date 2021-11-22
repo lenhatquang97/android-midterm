@@ -9,6 +9,7 @@ class DebtLogCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        color: model.enable ? Colors.white : Colors.grey[200],
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -20,7 +21,7 @@ class DebtLogCard extends StatelessWidget {
             children: [
               Text(model.isDebt == false ? 'Tôi cho nợ' : 'Tôi nợ',
                   style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 25,
                       color: model.isDebt == false ? Colors.green : Colors.red,
                       decoration: model.enable
                           ? TextDecoration.none
@@ -33,19 +34,16 @@ class DebtLogCard extends StatelessWidget {
                   Text(model.name,
                       style: TextStyle(
                         fontSize: 20,
-                        decoration: model.enable
-                            ? TextDecoration.none
-                            : TextDecoration.lineThrough,
                       )),
                   Text(formatMoney(model.amount),
                       style: TextStyle(
-                        fontSize: 20,
-                        decoration: model.enable
-                            ? TextDecoration.none
-                            : TextDecoration.lineThrough,
-                        color:
-                            model.isDebt == false ? Colors.green : Colors.red,
-                      ))
+                          fontSize: 25,
+                          decoration: model.enable
+                              ? TextDecoration.none
+                              : TextDecoration.lineThrough,
+                          color:
+                              model.isDebt == false ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.bold))
                 ],
               ),
               const SizedBox(height: 5),
@@ -53,9 +51,6 @@ class DebtLogCard extends StatelessWidget {
                   '${model.dueDate.day}/${model.dueDate.month}/${model.dueDate.year}',
                   style: TextStyle(
                     fontSize: 20,
-                    decoration: model.enable
-                        ? TextDecoration.none
-                        : TextDecoration.lineThrough,
                   ))
             ],
           ),
