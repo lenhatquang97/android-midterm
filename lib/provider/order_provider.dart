@@ -34,6 +34,7 @@ class OrderProvider extends ChangeNotifier {
     var data = <String, dynamic>{};
     data["name"] = name;
     data["phone_number"] = phone;
+    data["note"] = note;
     data["location"] = location;
     data["address"] = address;
     data["enable"] = true;
