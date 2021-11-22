@@ -181,9 +181,11 @@ class _AddDebtState extends State<AddDebt> {
                           hintText: 'Số tiền',
                           prefixIcon: Icon(Icons.attach_money)),
                     ),
-                    TextFormField(
-                      textAlignVertical: const TextAlignVertical(y: 0.5),
-                      decoration: const InputDecoration(
+                    const TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      textAlignVertical: TextAlignVertical(y: 0.5),
+                      decoration: InputDecoration(
                           hintText: 'Mô tả',
                           prefixIcon: Icon(Icons.description)),
                     ),
