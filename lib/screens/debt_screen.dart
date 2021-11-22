@@ -26,6 +26,7 @@ class DebtScreen extends StatefulWidget {
   const DebtScreen({Key? key, required this.debtId}) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   _State createState() => _State(debtId);
 }
 
@@ -34,7 +35,7 @@ class _State extends State<DebtScreen> {
   _State(this.debtId);
 
   final datasets = <String, dynamic>{};
-  final String uid = FirebaseAuth.instance.currentUser!.uid as String;
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
 
   DebtModel debt = DebtModel.empty();
   @override

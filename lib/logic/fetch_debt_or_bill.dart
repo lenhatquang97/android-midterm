@@ -17,11 +17,13 @@ Future<Map<String, Map<String, dynamic>>> fetchData(
 
 Future<int> calculateTotal(bool value) async {
   final uid = await SecureStorage.readSecureData(SecureStorage.userID);
+  print(uid);
   final firestore = FirebaseFirestore.instance;
   final result = await firestore.collection('khoanno').get();
   final docFilter = result.docs.where((element) =>
       element.data()['created_by'] == uid &&
-      element.data()['is_debt'] == value);
+      element.data()['is_debt'] == value &&
+      element.data()['enable'] == true);
   if (docFilter.isNotEmpty) {
     return docFilter.map((doc) => doc.data()['amount']).reduce((a, b) => a + b);
   }

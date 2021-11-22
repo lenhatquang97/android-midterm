@@ -13,6 +13,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:intl/intl.dart';
+import 'package:auto_route/auto_route.dart';
 
 DateFormat dateFormat = DateFormat("HH:mm dd-MM-yyyy");
 final firestoreInstance = FirebaseFirestore.instance;
