@@ -1,18 +1,13 @@
+import 'package:android_midterm/provider/page_num_provider.dart';
 import 'package:android_midterm/screens/billing_log_screen.dart';
 import 'package:android_midterm/screens/debt_log_screen.dart';
 import 'package:android_midterm/screens/settings/setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   DashboardScreen({Key? key}) : super(key: key);
-
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  int currentIndex = 0;
 
   List<Widget> screens = [
     const DebtLogScreen(),
@@ -22,8 +17,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pageNumModel = Provider.of<PageNumProvider>(context);
     return Scaffold(
-      body: screens[currentIndex],
+      body: screens[pageNumModel.pageNum],
       bottomNavigationBar: BottomNavigationBar(
         selectedLabelStyle: const TextStyle(fontSize: 20),
         unselectedLabelStyle: const TextStyle(fontSize: 20),
@@ -45,13 +41,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             label: 'Thiết lập',
           ),
         ],
-        currentIndex: currentIndex,
+        currentIndex: pageNumModel.pageNum,
         selectedItemColor: Colors.blue[600],
         onTap: (index) {
           // ignore: avoid_print
-          setState(() {
-            currentIndex = index;
-          });
+          pageNumModel.pageNum = index;
         },
       ),
     );

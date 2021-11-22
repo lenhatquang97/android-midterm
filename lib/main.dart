@@ -1,3 +1,4 @@
+import 'package:android_midterm/provider/page_num_provider.dart';
 import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => OrderProvider(),
-          )
+          ),
+          ChangeNotifierProvider(create: (context) => PageNumProvider()),
         ],
         child: MaterialApp.router(
           routerDelegate: _appRouter.delegate(),

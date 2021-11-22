@@ -1,10 +1,12 @@
 import 'package:android_midterm/models/debt_model.dart';
+import 'package:android_midterm/provider/page_num_provider.dart';
 import 'package:android_midterm/utils/user_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:provider/provider.dart';
 
 class AddDebt extends StatefulWidget {
   const AddDebt({Key? key}) : super(key: key);
@@ -46,6 +48,7 @@ class _AddDebtState extends State<AddDebt> {
 
   @override
   Widget build(BuildContext context) {
+    final pageNumModel = Provider.of<PageNumProvider>(context);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -253,6 +256,7 @@ class _AddDebtState extends State<AddDebt> {
                                 phone: phone,
                                 createdBy: uid);
                             await object.CreateDebt();
+                            pageNumModel.pageNum = 0;
                             context.router.pushNamed('/dashboard');
                           },
                           child: const Text("Lưu"),

@@ -2,6 +2,7 @@ import 'package:android_midterm/models/item.dart';
 import 'package:android_midterm/models/location.dart';
 import 'package:android_midterm/models/order_model.dart';
 import 'package:android_midterm/provider/order_provider.dart';
+import 'package:android_midterm/provider/page_num_provider.dart';
 import 'package:android_midterm/provider/picker_provider.dart';
 import 'package:android_midterm/screens/map_picker_v2.dart';
 import 'package:android_midterm/screens/order_screen.dart';
@@ -91,6 +92,7 @@ class _AddOrderState extends State<AddOrder> {
 
   @override
   Widget build(BuildContext context) {
+    final pageNumModel = Provider.of<PageNumProvider>(context);
     // ignore: non_constant_identifier_names
     var _order_provider = Provider.of<OrderProvider>(context);
     // ignore: non_constant_identifier_names
@@ -455,6 +457,7 @@ class _AddOrderState extends State<AddOrder> {
                                 .update(data)
                                 .catchError((onError) => print(onError));
                             _picker_provider.init();
+                            pageNumModel.pageNum = 1;
                             context.router.pushNamed('/dashboard');
                             return;
                           }
@@ -469,6 +472,7 @@ class _AddOrderState extends State<AddOrder> {
                               uid,
                               _date_picker);
                           _picker_provider.init();
+                          pageNumModel.pageNum = 1;
                           context.router.pushNamed('/dashboard');
                         },
                         child: const Text("Lưu"),
