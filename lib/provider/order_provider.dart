@@ -1,5 +1,8 @@
 import 'package:android_midterm/models/item.dart';
+import 'package:android_midterm/models/order_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbols.dart';
 
 class OrderProvider extends ChangeNotifier {
   // ignore: non_constant_identifier_names, prefer_final_fields
@@ -26,13 +29,24 @@ class OrderProvider extends ChangeNotifier {
   }
 
   // ignore: non_constant_identifier_names
-  bool SaveOrder() {
-    for (var item in _list_item) {
-      if (item.item_name.isEmpty || item.amount == 0) {
-        return false;
-      }
+  Future<void> SaveOrder(String name, String phone, String note,
+      GeoPoint location, String address, String createdBy) async {
+    var data = <String, dynamic>{};
+    data["name"] = name;
+    data["phone"] = phone;
+    data["location"] = location;
+    data["address"] = address;
+    data["enable"] = true;
+    data["createdBy"] = createdBy;
+    data["products"] = [];
+    for (var i = 0; i < _list_item.length; i++) {
+      var temp = {"name": _list_item[i].item_name, "qua": _list_item[i].amount};
+      data["products"].add(temp);
     }
-    //Save order to database code
-    return true;
+    final firestoreInstance = FirebaseFirestore.instance;
+    await firestoreInstance
+        .collection("donhang")
+        .add(data)
+        .catchError((onError) => print(onError));
   }
 }

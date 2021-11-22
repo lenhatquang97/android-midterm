@@ -12,15 +12,35 @@ class DebtModel {
   String createdBy = '';
   DebtModel.empty();
   DebtModel(
-      {required amount,
-      required dueDate,
-      required createdAt,
-      required enable,
-      required isDebt,
-      required name,
-      required note,
-      required phone,
-      required createdBy});
+      {required this.amount,
+      required this.dueDate,
+      required this.createdAt,
+      required this.enable,
+      required this.isDebt,
+      required this.name,
+      required this.note,
+      required this.phone,
+      required this.createdBy});
+
+  // ignore: non_constant_identifier_names
+  Future<void> CreateDebt() async {
+    var data = <String, dynamic>{};
+    data["amount"] = amount;
+    data["due_date"] = dueDate;
+    data["created_at"] = createdAt;
+    data["enable"] = enable;
+    data["is_debt"] = isDebt;
+    data["name"] = name;
+    data["note"] = note;
+    data["phone_number"] = phone;
+    data["created_by"] = createdBy;
+    final firestoreInstance = FirebaseFirestore.instance;
+    firestoreInstance
+        .collection("khoanno")
+        .add(data)
+        .catchError((onError) => print(onError));
+  }
+
   Future<void> fetchDebt(docId, uid) async {
     final firestoreInstance = FirebaseFirestore.instance;
     await firestoreInstance.collection("khoanno").doc(docId).get().then((data) {
