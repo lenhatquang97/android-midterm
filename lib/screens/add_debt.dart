@@ -45,12 +45,14 @@ class _AddDebtState extends State<AddDebt> {
           "Debt Details",
           style: TextStyle(color: Colors.white),
         ),
-        leading: const IconButton(
-          icon: Icon(
+        leading: IconButton(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
-          onPressed: null,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: Column(
@@ -207,7 +209,9 @@ class _AddDebtState extends State<AddDebt> {
                   child: ConstrainedBox(
                       constraints: const BoxConstraints.tightFor(height: 50),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         child: const Text("Luu"),
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<

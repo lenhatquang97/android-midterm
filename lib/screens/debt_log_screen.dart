@@ -4,7 +4,9 @@ import 'package:android_midterm/logic/fetch_debt_or_bill.dart';
 import 'package:android_midterm/models/debt_model.dart';
 import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:android_midterm/utils/currency_util.dart';
+import 'package:android_midterm/screens/add_debt.dart' as ad;
 import 'package:android_midterm/widgets/debt_log_card.dart';
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -117,7 +119,12 @@ class DebtLogScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ad.AddDebt()));
+                  },
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
