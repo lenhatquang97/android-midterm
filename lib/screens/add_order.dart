@@ -1,7 +1,10 @@
 import 'package:android_midterm/models/item.dart';
+import 'package:android_midterm/models/location.dart';
+import 'package:android_midterm/models/order_model.dart';
 import 'package:android_midterm/provider/order_provider.dart';
 import 'package:android_midterm/provider/picker_provider.dart';
 import 'package:android_midterm/screens/map_picker_v2.dart';
+import 'package:android_midterm/screens/order_screen.dart';
 import 'package:android_midterm/utils/user_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +14,11 @@ import 'package:provider/provider.dart';
 import 'package:auto_route/auto_route.dart';
 
 class AddOrder extends StatefulWidget {
-  const AddOrder({Key? key}) : super(key: key);
+  // ignore: non_constant_identifier_names
+  const AddOrder({Key? key, this.docs_id}) : super(key: key);
+
+  // ignore: non_constant_identifier_names, avoid_types_as_parameter_names
+  final String? docs_id;
 
   @override
   _AddOrderState createState() => _AddOrderState();
@@ -34,7 +41,53 @@ class _AddOrderState extends State<AddOrder> {
   // ignore: non_constant_identifier_names
   final _form_key = GlobalKey<FormState>();
 
+  // ignore: non_constant_identifier_names
   DateTime _date_picker = DateTime.now();
+  OrderModel object = OrderModel();
+
+  Future<void> _loadData() async {
+    String uid = await SecureStorage.readSecureData(SecureStorage.userID);
+    await object.fetchOrder(widget.docs_id, uid);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.docs_id == null) {
+      WidgetsBinding.instance!.addPersistentFrameCallback((timeStamp) {
+        var _order_provider =
+            Provider.of<OrderProvider>(context, listen: false);
+        _order_provider.clear();
+        var _picker_provider =
+            Provider.of<PickerProvider>(context, listen: false);
+        _picker_provider.init();
+      });
+      return;
+    }
+    _loadData().then((value) {
+      _name_controller.text = object.name;
+      _phone_controller.text = object.phone;
+      _desc_controller.text = object.note;
+      _date_picker = object.dueDate;
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+        var _order_provider =
+            Provider.of<OrderProvider>(context, listen: false);
+        // ignore: non_constant_identifier_names
+        var _picker_provider =
+            Provider.of<PickerProvider>(context, listen: false);
+        _order_provider.clear();
+        for (var item in object.products) {
+          _order_provider.AddItem(ItemOrder(item.name, item.qua));
+        }
+        _picker_provider.load_location(Location(
+            lat: object.location.latitude,
+            lng: object.location.longitude,
+            formattedAddress: object.address,
+            name: object.address));
+        setState(() {});
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +97,7 @@ class _AddOrderState extends State<AddOrder> {
     var _picker_provider = Provider.of<PickerProvider>(context);
     // ignore: non_constant_identifier_names
     var _list_item = _order_provider.list_item;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -250,13 +304,17 @@ class _AddOrderState extends State<AddOrder> {
                               const SizedBox(
                                 height: 18,
                               ),
-                              Text(
-                                _picker_provider.current_location.name.isEmpty
-                                    ? "Choose location"
-                                    : _picker_provider.current_location.name,
-                                textAlign: TextAlign.justify,
-                                style: const TextStyle(
-                                    color: Colors.blue, fontSize: 16),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 30.0),
+                                child: Text(
+                                  _picker_provider.current_location.name.isEmpty
+                                      ? "Choose location"
+                                      : _picker_provider.current_location.name,
+                                  maxLines: null,
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                      color: Colors.blue, fontSize: 16),
+                                ),
                               ),
                             ],
                           ),
@@ -366,6 +424,40 @@ class _AddOrderState extends State<AddOrder> {
                           var name = _name_controller.text;
                           var phone = _phone_controller.text;
                           var note = _desc_controller.text;
+                          if (widget.docs_id != null) {
+                            var data = <String, dynamic>{};
+                            data["name"] = name;
+                            data["phone_number"] = phone;
+                            data["location"] = GeoPoint(
+                                _picker_provider.current_location.lat,
+                                _picker_provider.current_location.lng);
+                            data["note"] = note;
+                            data["address"] = _picker_provider
+                                .current_location.formattedAddress;
+                            data["enable"] = object.enable;
+                            String uid = await SecureStorage.readSecureData(
+                                SecureStorage.userID);
+                            data["created_by"] = uid;
+                            data["products"] = [];
+                            data["due_date"] = Timestamp.fromDate(_date_picker);
+                            for (var i = 0; i < _list_item.length; i++) {
+                              var temp = {
+                                "name": _list_item[i].item_name,
+                                "qua": _list_item[i].amount
+                              };
+                              data["products"].add(temp);
+                            }
+                            final firestoreInstance =
+                                FirebaseFirestore.instance;
+                            await firestoreInstance
+                                .collection("donhang")
+                                .doc(widget.docs_id)
+                                .update(data)
+                                .catchError((onError) => print(onError));
+                            _picker_provider.init();
+                            context.router.pushNamed('/dashboard');
+                            return;
+                          }
                           await _order_provider.SaveOrder(
                               name,
                               phone,
@@ -376,6 +468,7 @@ class _AddOrderState extends State<AddOrder> {
                                   .current_location.formattedAddress,
                               uid,
                               _date_picker);
+                          _picker_provider.init();
                           context.router.pushNamed('/dashboard');
                         },
                         child: const Text("Lưu"),

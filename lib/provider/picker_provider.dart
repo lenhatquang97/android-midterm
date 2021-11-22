@@ -32,6 +32,17 @@ class PickerProvider extends ChangeNotifier {
     location_controller.sink.add(location);
   }
 
+  void init() {
+    current_location =
+        Location(name: "", formattedAddress: "", lat: 10.85636, lng: 106.6543);
+    notifyListeners();
+  }
+
+  void load_location(Location location) {
+    current_location = location;
+    notifyListeners();
+  }
+
   void setLocationByMovingMap(Location location) {
     current_location = location;
     notifyListeners();

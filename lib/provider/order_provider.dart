@@ -26,6 +26,12 @@ class OrderProvider extends ChangeNotifier {
   // ignore: non_constant_identifier_names
   void UpdateItem(ItemOrder item, int index) {
     _list_item[index] = item;
+    notifyListeners();
+  }
+
+  void clear() {
+    _list_item.clear();
+    notifyListeners();
   }
 
   // ignore: non_constant_identifier_names
