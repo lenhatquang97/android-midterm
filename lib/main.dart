@@ -1,6 +1,10 @@
 import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+
+import 'provider/order_provider.dart';
+import 'provider/picker_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,14 +19,23 @@ class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
-      debugShowCheckedModeBanner: false,
-      title: 'Android Midterm',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => PickerProvider.instance,
+          ),
+          ChangeNotifierProvider(
+            create: (context) => OrderProvider(),
+          )
+        ],
+        child: MaterialApp.router(
+          routerDelegate: _appRouter.delegate(),
+          routeInformationParser: _appRouter.defaultRouteParser(),
+          debugShowCheckedModeBanner: false,
+          title: 'Android Midterm',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+        ));
   }
 }

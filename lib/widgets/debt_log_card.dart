@@ -8,13 +8,13 @@ class DebtLogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(model.name);
     return Card(
+        elevation: 5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
