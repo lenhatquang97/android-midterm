@@ -24,11 +24,17 @@ class _AddOrderState extends State<AddOrder> {
   final _amount_controller = TextEditingController();
   // ignore: non_constant_identifier_names
 
+  // ignore: non_constant_identifier_names
   final _name_controller = TextEditingController();
+  // ignore: non_constant_identifier_names
   final _phone_controller = TextEditingController();
+  // ignore: non_constant_identifier_names
   final _desc_controller = TextEditingController();
 
+  // ignore: non_constant_identifier_names
   final _form_key = GlobalKey<FormState>();
+
+  DateTime _date_picker = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +118,7 @@ class _AddOrderState extends State<AddOrder> {
                 ),
                 Container(
                   constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height / 3),
+                      maxHeight: MediaQuery.of(context).size.height / 5),
                   child: ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -263,7 +269,90 @@ class _AddOrderState extends State<AddOrder> {
                 )
               ],
             ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 10),
+            ElevatedButton(
+                onPressed: () async {
+                  await showDatePicker(
+                          context: context,
+                          initialDate: _date_picker,
+                          firstDate: DateTime(2001),
+                          lastDate: DateTime(2030))
+                      .then((value) {
+                    if (value == null) return;
+                    setState(() {
+                      // ignore: avoid_print
+                      _date_picker =
+                          DateTime(value.year, value.month, value.day);
+                      print(_date_picker);
+                    });
+                  });
+                  await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay(
+                              hour: DateTime.now().hour,
+                              minute: DateTime.now().minute))
+                      .then((value) {
+                    if (value == null) return;
+                    setState(() {
+                      _date_picker = DateTime(
+                          _date_picker.year,
+                          _date_picker.month,
+                          _date_picker.day,
+                          value.hour,
+                          value.minute);
+                    });
+                  });
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                ),
+                child: SizedBox(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Column(
+                        children: const [
+                          SizedBox(height: 13),
+                          Icon(
+                            Icons.calendar_today,
+                            color: Colors.blue,
+                            size: 25,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          Text(
+                            _date_picker.hour.toString() +
+                                ":" +
+                                _date_picker.minute.toString() +
+                                " " +
+                                _date_picker.day.toString() +
+                                '/' +
+                                _date_picker.month.toString() +
+                                '/' +
+                                _date_picker.year.toString(),
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                                color: Colors.blue, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+            Divider(
+              thickness: 20,
+              color: Colors.grey.shade300,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
             Row(
               children: [
                 const SizedBox(width: 10),
@@ -285,7 +374,8 @@ class _AddOrderState extends State<AddOrder> {
                                   _picker_provider.current_location.lng),
                               _picker_provider
                                   .current_location.formattedAddress,
-                              uid);
+                              uid,
+                              _date_picker);
                           context.router.pushNamed('/dashboard');
                         },
                         child: const Text("Lưu"),
