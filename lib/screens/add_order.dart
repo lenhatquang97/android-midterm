@@ -2,6 +2,7 @@ import 'package:android_midterm/models/item.dart';
 import 'package:android_midterm/provider/order_provider.dart';
 import 'package:android_midterm/provider/picker_provider.dart';
 import 'package:android_midterm/screens/map_picker_v2.dart';
+import 'package:android_midterm/utils/user_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -270,6 +271,8 @@ class _AddOrderState extends State<AddOrder> {
                         var name = _name_controller.text;
                         var phone = _phone_controller.text;
                         var note = _desc_controller.text;
+                        String createdBy = await SecureStorage.readSecureData(
+                            SecureStorage.userID);
                         await _order_provider.SaveOrder(
                             name,
                             phone,
@@ -277,7 +280,7 @@ class _AddOrderState extends State<AddOrder> {
                             GeoPoint(_picker_provider.current_location.lat,
                                 _picker_provider.current_location.lng),
                             _picker_provider.current_location.formattedAddress,
-                            "test");
+                            createdBy);
                         Navigator.pop(context);
                       },
                       child: const Text("Lưu"),

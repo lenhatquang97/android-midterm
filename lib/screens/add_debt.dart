@@ -1,4 +1,5 @@
 import 'package:android_midterm/models/debt_model.dart';
+import 'package:android_midterm/utils/user_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -238,6 +239,8 @@ class _AddDebtState extends State<AddDebt> {
                             if (note.isEmpty) {
                               note = "";
                             }
+                            String uid = await SecureStorage.readSecureData(
+                                SecureStorage.userID);
                             var object = DebtModel(
                                 amount: amount,
                                 dueDate: _date_time,
@@ -247,7 +250,7 @@ class _AddDebtState extends State<AddDebt> {
                                 name: name,
                                 note: note,
                                 phone: phone,
-                                createdBy: "test");
+                                createdBy: uid);
                             await object.CreateDebt();
 
                             Navigator.pop(context);
