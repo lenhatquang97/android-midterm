@@ -26,6 +26,7 @@ class DebtScreen extends StatefulWidget {
   const DebtScreen({Key? key, required this.debtId}) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   _State createState() => _State(debtId);
 }
 
@@ -34,7 +35,7 @@ class _State extends State<DebtScreen> {
   _State(this.debtId);
 
   final datasets = <String, dynamic>{};
-  final String uid = FirebaseAuth.instance.currentUser!.uid as String;
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
 
   DebtModel debt = DebtModel.empty();
   @override
@@ -48,8 +49,15 @@ class _State extends State<DebtScreen> {
   @override
   Widget build(BuildContext context) {
     final formatCurrency = NumberFormat('#,##0.00', 'ID');
+    if (identical(debt, DebtModel.empty())) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Column(
         children: [
           Expanded(
@@ -60,7 +68,7 @@ class _State extends State<DebtScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.of(context).pop(true),
+                    onTap: () => context.router.pop(),
                     child: Container(
                         margin: const EdgeInsets.only(left: 20.0, top: 10.0),
                         padding: const EdgeInsets.all(15),
@@ -78,14 +86,14 @@ class _State extends State<DebtScreen> {
                         child: RichText(
                           text: TextSpan(
                             children: [
-                              WidgetSpan(
+                              const WidgetSpan(
                                 alignment: ui.PlaceholderAlignment.middle,
-                                child: new Icon(Icons.arrow_back),
+                                child: Icon(Icons.arrow_back),
                               ),
                               TextSpan(
                                 text: " Quay về",
                                 style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                     color: Color.fromARGB(255, 0, 0, 0),
                                   ),
                                 ),
@@ -100,7 +108,7 @@ class _State extends State<DebtScreen> {
                     width: double.maxFinite,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30.0),
-                      color: Color(0xFFFFFFFF),
+                      color: const Color(0xFFFFFFFF),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
@@ -128,7 +136,7 @@ class _State extends State<DebtScreen> {
                               maxLines: 1,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Center(
                             child: Text(
                               (debt.isDebt ? '-' : '') +
@@ -146,7 +154,7 @@ class _State extends State<DebtScreen> {
                               maxLines: 1,
                             ),
                           ),
-                          SizedBox(height: 25),
+                          const SizedBox(height: 25),
                           Row(
                             mainAxisAlignment: MainAxisAlignment
                                 .center, //Center Row contents horizontally,
@@ -168,23 +176,24 @@ class _State extends State<DebtScreen> {
                     padding: const EdgeInsets.all(30),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30.0),
                           topRight: Radius.circular(30.0)),
-                      color: Color(0xFFFFFFFF),
+                      color: const Color(0xFFFFFFFF),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 0,
                           blurRadius: 70,
-                          offset: Offset(0, -15), // changes position of shadow
+                          offset: const Offset(
+                              0, -15), // changes position of shadow
                         ),
                       ],
                     ),
                     child: Column(
                       children: [
                         GestureDetector(
-                          onTap: () => launch("tel://0123456789"),
+                          onTap: () => launch("tel://${debt.phone}"),
                           child: Card(
                             elevation: 3,
                             shape: RoundedRectangleBorder(
@@ -196,9 +205,11 @@ class _State extends State<DebtScreen> {
                                 children: [
                                   CircleAvatar(
                                     backgroundColor: Colors.brown.shade800,
-                                    child: const Text('NK'),
+                                    child: Text(debt.name.isNotEmpty
+                                        ? debt.name.substring(0, 1)
+                                        : ""),
                                   ),
-                                  SizedBox(width: 15),
+                                  const SizedBox(width: 15),
                                   Expanded(
                                     flex: 2,
                                     child: Column(
@@ -208,17 +219,17 @@ class _State extends State<DebtScreen> {
                                       children: <Widget>[
                                         // ignore: prefer_const_constructors
                                         Text(
-                                          "Nguyên Khoa",
+                                          debt.name,
                                           // ignore: prefer_const_constructors
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 19.0,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(height: 5),
+                                        const SizedBox(height: 5),
                                         // ignore: prefer_const_constructors
                                         Text(
-                                          'SĐT: ${"0123456789"}',
+                                          'SĐT: ${debt.phone}',
                                           // ignore: prefer_const_constructors
                                           style: TextStyle(
                                               color: Colors.black,
@@ -229,53 +240,53 @@ class _State extends State<DebtScreen> {
                                   ),
                                   Icon(
                                     MdiIcons.fromString('phone'),
-                                    color: Color(0xFF6886C5),
+                                    color: const Color(0xFF6886C5),
                                   ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Icon(
                               MdiIcons.fromString('calendar-clock'),
                               size: 24,
-                              color: Color(0xFF6886C5),
+                              color: const Color(0xFF6886C5),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Text(
                               'Tạo lúc:',
                               style: defautText(color: 0xFF6886C5),
                               textAlign: TextAlign.left,
                               maxLines: 1,
                             ),
-                            SizedBox(width: 15),
+                            const SizedBox(width: 15),
                             Text(
-                              '${dateFormat.format(debt.dueDate)}',
+                              dateFormat.format(debt.dueDate),
                               style: defautText(color: 0xFF000000),
                               textAlign: TextAlign.left,
                               maxLines: 1,
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             Icon(
                               MdiIcons.fromString('note'),
                               size: 24,
-                              color: Color(0xFF6886C5),
+                              color: const Color(0xFF6886C5),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Text(
                               'Ghi chú: ',
                               style: defautText(color: 0xFF6886C5),
                               textAlign: TextAlign.left,
                               maxLines: 1,
                             ),
-                            SizedBox(width: 15),
+                            const SizedBox(width: 15),
                             Flexible(
                               child: Text(
                                 debt.note,
@@ -291,10 +302,10 @@ class _State extends State<DebtScreen> {
                   Container(
                       padding: const EdgeInsets.all(30),
                       width: double.maxFinite,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFFFFFFFF),
                       ),
-                      child: SizedBox(height: 5)),
+                      child: const SizedBox(height: 5)),
                 ],
               ),
             ),
@@ -302,7 +313,7 @@ class _State extends State<DebtScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             width: double.maxFinite,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.0),
                   topRight: Radius.circular(30.0)),
@@ -328,7 +339,7 @@ class _State extends State<DebtScreen> {
                             style: defautText(color: 0xFFFFFFFF),
                             textAlign: TextAlign.center,
                           )))),
-              SizedBox(width: 15),
+              const SizedBox(width: 15),
               Expanded(
                   child: ElevatedButton(
                       onPressed: !debt.enable
@@ -337,6 +348,7 @@ class _State extends State<DebtScreen> {
                               debt.update(debtId, uid, {"enable": false}).then(
                                   (result) {
                                 setState(() {});
+                                context.router.pushNamed('/dashboard');
                               });
                             },
                       child: Container(

@@ -7,10 +7,15 @@ import 'package:android_midterm/utils/currency_util.dart';
 import 'package:android_midterm/widgets/debt_log_card.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'dart:collection';
 
 //Create a screen with ListView of DebtLog
 //DebtLog contains IsDebt, Person, Money, Date, Description
 //IsDebt is a boolean, Person is a string, Money is a double, Date is a string, Description is a string
+int convertBool(bool value) {
+  return value ? 1 : 0;
+}
+
 class DebtLogScreen extends StatelessWidget {
   const DebtLogScreen({Key? key}) : super(key: key);
   @override
@@ -85,15 +90,20 @@ class DebtLogScreen extends StatelessWidget {
                   AsyncSnapshot<Map<String, Map<String, dynamic>>> snapshot) {
                 if (snapshot.hasData) {
                   final data = snapshot.data;
+                  final sortedKeys = data!.keys.toList()
+                    ..sort((a, b) => convertBool(data[b]!['enable'])
+                        .compareTo(convertBool(data[a]!['enable'])));
+                  final sorted = LinkedHashMap.fromIterable(sortedKeys,
+                      key: (k) => k, value: (k) => data[k]!);
                   return Expanded(
                       child: ListView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          children: data!.entries
+                          children: sorted.entries
                               .map((e) => GestureDetector(
                                     onTap: () {
-                                      context.router
-                                          .push(DebtScreen(debtId: e.key));
+                                      context.router.push(
+                                          DebtScreen(debtId: e.key as String));
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
