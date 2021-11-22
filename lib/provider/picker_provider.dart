@@ -35,7 +35,7 @@ class PickerProvider extends ChangeNotifier {
   void init() {
     current_location =
         Location(name: "", formattedAddress: "", lat: 10.85636, lng: 106.6543);
-    notifyListeners();
+    // notifyListeners();
   }
 
   void load_location(Location location) {

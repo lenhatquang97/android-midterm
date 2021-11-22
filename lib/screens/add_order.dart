@@ -58,10 +58,10 @@ class _AddOrderState extends State<AddOrder> {
       WidgetsBinding.instance!.addPersistentFrameCallback((timeStamp) {
         var _order_provider =
             Provider.of<OrderProvider>(context, listen: false);
-        _order_provider.clear();
+        // _order_provider.clear();
         var _picker_provider =
             Provider.of<PickerProvider>(context, listen: false);
-        _picker_provider.init();
+        // _picker_provider.init();
       });
       return;
     }
