@@ -44,11 +44,9 @@ dependencies:
     sdk: flutter
   flutter_polyline_points: ^1.0.0
   flutter_secure_storage: ^5.0.2
-  flutter_typeahead: ^3.2.1
   google_fonts: ^2.1.0
   google_sign_in: ^5.2.1
   material_design_icons_flutter: ^5.0.6295
-  rflutter_alert: ^2.0.4
   url_launcher: ^6.0.13
 
 dev_dependencies:
