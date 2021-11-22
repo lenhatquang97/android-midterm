@@ -22,6 +22,26 @@ class DebtModel {
       required note,
       required phone,
       required createdBy});
+
+  Future<void> createDebt() async {
+    final firestoreInstance = FirebaseFirestore.instance;
+    // ignore: prefer_collection_literals
+    var data = Map<String, dynamic>();
+    data["amount"] = amount;
+    data["due_date"] = dueDate;
+    data["created_at"] = createdAt;
+    data["enable"] = enable;
+    data["is_debt"] = isDebt;
+    data["name"] = name;
+    data["note"] = note;
+    data["phone"] = phone;
+    data["created_by"] = createdBy;
+    await firestoreInstance
+        .collection('khoanno')
+        .add(data)
+        .catchError((onError) => print(onError));
+  }
+
   Future<void> fetchDebt(docId, uid) async {
     final firestoreInstance = FirebaseFirestore.instance;
     await firestoreInstance.collection("khoanno").doc(docId).get().then((data) {

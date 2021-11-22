@@ -1,6 +1,8 @@
+import 'package:android_midterm/models/debt_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 class AddDebt extends StatefulWidget {
   const AddDebt({Key? key}) : super(key: key);
@@ -14,6 +16,13 @@ class _AddDebtState extends State<AddDebt> {
   DateTime _date_time = DateTime.now();
   // ignore: non_constant_identifier_names
   bool _button_index = true; //true == left false == right
+
+  //Text Controller
+  final _name_field_controller = TextEditingController();
+  final _amount_field_controller = TextEditingController();
+  final _desc_field_controller = TextEditingController();
+  final _phone_field_controller = TextEditingController();
+  final _form_key = GlobalKey<FormState>();
 
   // ignore: non_constant_identifier_names
   void _set_date_time(DateTime a) {
@@ -162,41 +171,68 @@ class _AddDebtState extends State<AddDebt> {
           const SizedBox(height: 30),
           Expanded(
             flex: 5,
-            child: Column(
-              children: [
-                const Divider(
-                  thickness: 1,
-                  color: Colors.grey,
-                ),
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  textAlignVertical: const TextAlignVertical(y: 0.5),
-                  decoration: InputDecoration(
-                      hintText: _button_index ? "Ten nguoi no" : "Ten chu no",
-                      prefixIcon: const Icon(Icons.person)),
-                ),
-                TextFormField(
-                  textAlignVertical: const TextAlignVertical(y: 0.5),
-                  decoration: const InputDecoration(
-                      hintText: 'So tien',
-                      prefixIcon: Icon(Icons.attach_money)),
-                ),
-                TextFormField(
-                  textAlignVertical: const TextAlignVertical(y: 0.5),
-                  decoration: const InputDecoration(
-                      hintText: 'Mo ta', prefixIcon: Icon(Icons.description)),
-                ),
-                TextFormField(
-                  textAlignVertical: const TextAlignVertical(y: 0.5),
-                  decoration: const InputDecoration(
-                      hintText: 'So dien thoai', prefixIcon: Icon(Icons.phone)),
-                ),
-              ],
+            child: Form(
+              key: _form_key,
+              child: Column(
+                children: [
+                  const Divider(
+                    thickness: 1,
+                    color: Colors.grey,
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui long nhap ten';
+                      }
+                      return null;
+                    },
+                    controller: _name_field_controller,
+                    textAlignVertical: const TextAlignVertical(y: 0.5),
+                    decoration: InputDecoration(
+                        hintText: _button_index ? "Ten nguoi no" : "Ten chu no",
+                        prefixIcon: const Icon(Icons.person)),
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui long nhap so tien';
+                      }
+                      try {
+                        int.parse(value);
+                        return null;
+                      } catch (error) {
+                        return 'Vui long nhap dung dinh dang';
+                      }
+                    },
+                    keyboardType: TextInputType.number,
+                    textAlignVertical: const TextAlignVertical(y: 0.5),
+                    controller: _amount_field_controller,
+                    decoration: const InputDecoration(
+                        hintText: 'So tien',
+                        prefixIcon: Icon(Icons.attach_money)),
+                  ),
+                  TextFormField(
+                    textAlignVertical: const TextAlignVertical(y: 0.5),
+                    controller: _desc_field_controller,
+                    decoration: const InputDecoration(
+                        hintText: 'Mo ta', prefixIcon: Icon(Icons.description)),
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui long nhap so dien thoai';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.phone,
+                    textAlignVertical: const TextAlignVertical(y: 0.5),
+                    controller: _phone_field_controller,
+                    decoration: const InputDecoration(
+                        hintText: 'So dien thoai',
+                        prefixIcon: Icon(Icons.phone)),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -209,8 +245,29 @@ class _AddDebtState extends State<AddDebt> {
                   child: ConstrainedBox(
                       constraints: const BoxConstraints.tightFor(height: 50),
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
+                        onPressed: () async {
+                          if (_form_key.currentState!.validate()) {
+                            var amount =
+                                int.parse(_amount_field_controller.text);
+                            var name = _name_field_controller.text;
+                            var phone = _phone_field_controller.text;
+                            var desc = _desc_field_controller.text;
+                            if (desc.isEmpty) {
+                              desc = "";
+                            }
+                            var object = DebtModel(
+                                amount: amount,
+                                dueDate: _date_time,
+                                createdAt: DateTime.now(),
+                                enable: true,
+                                isDebt: !_button_index,
+                                name: name,
+                                note: desc,
+                                phone: phone,
+                                createdBy: "db0xxGEch0PWi4iXQ9ax3HnXcV12");
+                            await object.createDebt();
+                            Navigator.pop(context);
+                          }
                         },
                         child: const Text("Luu"),
                         style: ButtonStyle(
