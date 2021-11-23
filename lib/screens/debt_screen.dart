@@ -1,3 +1,4 @@
+import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui show PlaceholderAlignment;
@@ -7,6 +8,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:android_midterm/models/debt_model.dart';
+import 'add_debt.dart' as ad;
 
 DateFormat dateFormat = DateFormat("dd-MM-yyyy");
 
@@ -318,10 +320,14 @@ class _State extends State<DebtScreen> {
                         onPressed: !debt.enable
                             ? null
                             : () {
-                                debt.update(debtId, uid,
-                                    {"enable": false}).then((result) {
-                                  setState(() {});
-                                });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ad.AddDebt(doc_id: debtId)));
+                                // debt.update(debtId, uid,
+                                //     {"enable": false}).then((result) {
+                                //   setState(() {});
                               },
                         child: Container(
                             height: 50,
