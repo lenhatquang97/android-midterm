@@ -156,9 +156,7 @@ class _State extends State<OrderScreen> {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
-    } else {
-      print('null');
-    }
+    } else {}
 
     // Defining an ID
     PolylineId id = PolylineId('poly');
