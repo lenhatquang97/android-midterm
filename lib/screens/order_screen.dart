@@ -283,7 +283,7 @@ class _State extends State<OrderScreen> {
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(true),
                       child: Container(
-                          margin: const EdgeInsets.only(left: 20.0, top: 10.0),
+                          margin: const EdgeInsets.only(right: 20.0, top: 10.0),
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30.0),
@@ -389,7 +389,9 @@ class _State extends State<OrderScreen> {
                                 children: [
                                   CircleAvatar(
                                     backgroundColor: Colors.brown.shade800,
-                                    child: const Text('NK'),
+                                    child: Text(order.name.isNotEmpty
+                                        ? order.name.substring(0, 1)
+                                        : ""),
                                   ),
                                   SizedBox(width: 15),
                                   Expanded(

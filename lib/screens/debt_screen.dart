@@ -199,7 +199,9 @@ class _State extends State<DebtScreen> {
                                   children: [
                                     CircleAvatar(
                                       backgroundColor: Colors.brown.shade800,
-                                      child: const Text('NK'),
+                                      child: Text(debt.name.isNotEmpty
+                                          ? debt.name.substring(0, 1)
+                                          : ""),
                                     ),
                                     SizedBox(width: 15),
                                     Expanded(
