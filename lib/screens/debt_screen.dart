@@ -187,7 +187,7 @@ class _State extends State<DebtScreen> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: () => launch("tel://0123456789"),
+                            onTap: () => launch("tel://${debt.phone}"),
                             child: Card(
                               elevation: 3,
                               shape: RoundedRectangleBorder(

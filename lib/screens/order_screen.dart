@@ -380,7 +380,7 @@ class _State extends State<OrderScreen> {
                         ),
                         SizedBox(height: 15),
                         GestureDetector(
-                          onTap: () => launch("tel://0123456789"),
+                          onTap: () => launch("tel://${order.phone}"),
                           child: Card(
                             elevation: 5,
                             shape: RoundedRectangleBorder(
