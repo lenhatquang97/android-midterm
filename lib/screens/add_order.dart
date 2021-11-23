@@ -51,17 +51,26 @@ class _AddOrderState extends State<AddOrder> {
     await object.fetchOrder(widget.docs_id, uid);
   }
 
+  Future<void> _initState() async {
+    String uid = await SecureStorage.readSecureData(SecureStorage.userID);
+  }
+
   @override
   void initState() {
     super.initState();
     if (widget.docs_id == null) {
-      WidgetsBinding.instance!.addPersistentFrameCallback((timeStamp) {
-        var _order_provider =
-            Provider.of<OrderProvider>(context, listen: false);
-        // _order_provider.clear();
-        var _picker_provider =
-            Provider.of<PickerProvider>(context, listen: false);
-        // _picker_provider.init();
+      _initState().then((value) {
+        WidgetsBinding.instance!.addPersistentFrameCallback((timeStamp) {
+          // ignore: non_constant_identifier_names
+          var _order_provider =
+              Provider.of<OrderProvider>(context, listen: false);
+          _order_provider.clear();
+          // ignore: non_constant_identifier_names
+          var _picker_provider =
+              Provider.of<PickerProvider>(context, listen: false);
+          _picker_provider.init();
+        });
+        setState(() {});
       });
       return;
     }
