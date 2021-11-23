@@ -9,12 +9,17 @@ import 'package:android_midterm/widgets/billing_log_card.dart';
 import 'package:android_midterm/widgets/debt_log_card.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'dart:collection';
 
 class BillingLogScreen extends StatefulWidget {
   const BillingLogScreen({Key? key}) : super(key: key);
 
   @override
   State<BillingLogScreen> createState() => _BillingLogScreenState();
+}
+
+int convertBool(bool value) {
+  return value ? 1 : 0;
 }
 
 class _BillingLogScreenState extends State<BillingLogScreen> {
@@ -41,11 +46,18 @@ class _BillingLogScreenState extends State<BillingLogScreen> {
                   AsyncSnapshot<Map<String, Map<String, dynamic>>> snapshot) {
                 if (snapshot.hasData) {
                   final data = snapshot.data;
+                  final sortedKeys = data!.keys.toList()
+                    ..sort((a, b) => (data[b]!['due_date'])
+                        .compareTo((data[a]!['due_date'])))
+                    ..sort((a, b) => convertBool(data[b]!['enable'])
+                        .compareTo(convertBool(data[a]!['enable'])));
+                  final sorted = LinkedHashMap.fromIterable(sortedKeys,
+                      key: (k) => k, value: (k) => data[k]!);
                   return Expanded(
                       child: ListView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          children: data!.entries
+                          children: sorted.entries
                               .map((e) => GestureDetector(
                                     onTap: () {
                                       context.router
