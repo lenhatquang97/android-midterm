@@ -303,9 +303,9 @@ class _AddOrderState extends State<AddOrder> {
                       shadowColor:
                           MaterialStateProperty.all(Colors.transparent),
                     ),
-                    child: SizedBox(
-                      height: 60,
-                      child: Row(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      child: Wrap(
                         children: [
                           Column(
                             children: const [
@@ -329,7 +329,7 @@ class _AddOrderState extends State<AddOrder> {
                                   _picker_provider.current_location.name.isEmpty
                                       ? "Chọn địa điểm"
                                       : _picker_provider.current_location.name,
-                                  maxLines: null,
+                                  maxLines: 5,
                                   textAlign: TextAlign.justify,
                                   style: const TextStyle(
                                       color: Colors.blue, fontSize: 16),
