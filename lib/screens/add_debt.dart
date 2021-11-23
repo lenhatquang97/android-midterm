@@ -276,6 +276,24 @@ class _AddDebtState extends State<AddDebt> {
                   onTap: () async {
                     String uid = await SecureStorage.readSecureData(
                         SecureStorage.userID);
+                    if (widget.doc_id != null) {
+                      var data = <String, dynamic>{};
+                      data["amount"] = int.parse(_amount_controller.text);
+                      data["due_date"] = _date_time;
+                      data["created_at"] = _object.createdAt;
+                      data["enable"] = true;
+                      data["is_debt"] = !_button_index;
+                      data["name"] = _name_controller.text;
+                      data["note"] = _desc_controller.text.isEmpty
+                          ? ""
+                          : _desc_controller.text;
+                      data["phone_number"] = _phone_controller.text;
+                      data["created_by"] = uid;
+                      await _object.update(widget.doc_id, uid, data);
+                      pageNumModel.pageNum = 0;
+                      context.router.pushNamed('/dashboard');
+                      return;
+                    }
                     var name = _name_controller.text;
                     var amount = int.parse(_amount_controller.text);
                     var note = _desc_controller.text;
