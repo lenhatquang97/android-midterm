@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:android_midterm/logic/fetch_debt_or_bill.dart';
 import 'package:android_midterm/models/debt_model.dart';
 import 'package:android_midterm/models/order_model.dart';
@@ -68,10 +70,7 @@ class _BillingLogScreenState extends State<BillingLogScreen> {
             const SizedBox(height: 10),
             GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ao.AddOrder()));
+                  context.router.pushNamed('/add-order');
                 },
                 child: Container(
                     height: 50,

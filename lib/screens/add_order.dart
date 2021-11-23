@@ -109,7 +109,7 @@ class _AddOrderState extends State<AddOrder> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            context.router.pop();
           },
         ),
         title: const Text(
