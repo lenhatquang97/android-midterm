@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:android_midterm/models/debt_model.dart';
 import 'package:android_midterm/provider/page_num_provider.dart';
 import 'package:android_midterm/utils/user_storage.dart';
@@ -9,7 +11,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:provider/provider.dart';
 
 class AddDebt extends StatefulWidget {
-  const AddDebt({Key? key}) : super(key: key);
+  const AddDebt({Key? key, this.doc_id}) : super(key: key);
+
+  final String? doc_id;
 
   @override
   _AddDebtState createState() => _AddDebtState();
@@ -24,6 +28,47 @@ class _AddDebtState extends State<AddDebt> {
   final _amount_controller = TextEditingController();
   final _desc_controller = TextEditingController();
   final _phone_controller = TextEditingController();
+  final _object = DebtModel(
+      amount: 0,
+      dueDate: DateTime.now(),
+      createdAt: DateTime.now(),
+      enable: true,
+      isDebt: true,
+      name: "",
+      note: "",
+      phone: "",
+      createdBy: "");
+
+  Future<void> _loadData() async {
+    String uid = await SecureStorage.readSecureData(SecureStorage.userID);
+    await _object.fetchDebt(widget.doc_id, uid);
+  }
+
+  Future<void> _initState() async {
+    String uid = await SecureStorage.readSecureData(SecureStorage.userID);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.doc_id != null) {
+      _loadData().then((value) {
+        _button_index = !_object.isDebt;
+        _name_controller.text = _object.name;
+        _amount_controller.text = _object.amount.toString();
+        _desc_controller.text = _object.note;
+        _phone_controller.text = _object.phone;
+        setState(() {
+          _date_time = _object.dueDate;
+        });
+      });
+    }
+    // } else {
+    //   _initState().then((value) {
+    //     setState(() {});
+    //   });
+    // }
+  }
 
   // ignore: non_constant_identifier_names
   void _set_date_time(DateTime a) {

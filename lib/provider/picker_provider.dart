@@ -25,6 +25,7 @@ class PickerProvider extends ChangeNotifier {
     String url =
         "https://maps.googleapis.com/maps/api/place/textsearch/json?query=$query&key=$map_key";
     Response response = await Dio().get(url);
+    print(response);
     return Location.parseLocationList(response.data);
   }
 
