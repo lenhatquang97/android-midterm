@@ -12,7 +12,7 @@ class PickerProvider extends ChangeNotifier {
   Location current_location =
       Location(name: "", formattedAddress: "", lat: 10.85636, lng: 106.6543);
   // ignore: constant_identifier_names
-  static const map_key = 'AIzaSyA7eJkKK0Zp_mziFO_Gb-9OsdK99jYXx-A';
+  static const map_key = 'AIzaSyDpea3f8ZzDtnD2CZ8MqTzx-TuG2OwvVSM';
   // ignore: avoid_init_to_null
   static PickerProvider _instance = PickerProvider._();
 
