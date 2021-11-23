@@ -61,10 +61,10 @@ class _AddOrderState extends State<AddOrder> {
     if (widget.docs_id == null) {
       print("null");
       _initState().then((value) {
-        _name_controller.text = object.name;
-        _phone_controller.text = object.phone;
-        _desc_controller.text = object.note;
-        _date_picker = object.dueDate;
+        // _name_controller.text = object.name;
+        // _phone_controller.text = object.phone;
+        // _desc_controller.text = object.note;
+        // _date_picker = object.dueDate;
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           var _order_provider =
               Provider.of<OrderProvider>(context, listen: false);
