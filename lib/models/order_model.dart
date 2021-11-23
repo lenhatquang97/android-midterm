@@ -13,7 +13,7 @@ class Product {
 class OrderModel {
   String note = '';
   String phone = '';
-  String name = '';
+  String name = 'A';
   DateTime dueDate = DateTime.now();
   GeoPoint location = const GeoPoint(10.0, 10.0);
   String address = '';

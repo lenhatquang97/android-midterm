@@ -389,9 +389,9 @@ class _State extends State<OrderScreen> {
                               child: Row(
                                 children: [
                                   CircleAvatar(
-                                    backgroundColor: Colors.brown.shade800,
-                                    child: const Text('NK'),
-                                  ),
+                                      child: Text(
+                                    order.name.substring(0, 1),
+                                  )),
                                   SizedBox(width: 15),
                                   Expanded(
                                     flex: 2,

@@ -6,7 +6,7 @@ class DebtModel {
   DateTime createdAt = DateTime.now();
   bool enable = true;
   bool isDebt = true;
-  String name = '';
+  String name = 'A';
   String note = '';
   String phone = '';
   String createdBy = '';
