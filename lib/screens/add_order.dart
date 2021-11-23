@@ -59,18 +59,26 @@ class _AddOrderState extends State<AddOrder> {
   void initState() {
     super.initState();
     if (widget.docs_id == null) {
+      print("null");
       _initState().then((value) {
-        WidgetsBinding.instance!.addPersistentFrameCallback((timeStamp) {
-          // ignore: non_constant_identifier_names
+        _name_controller.text = object.name;
+        _phone_controller.text = object.phone;
+        _desc_controller.text = object.note;
+        _date_picker = object.dueDate;
+        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           var _order_provider =
               Provider.of<OrderProvider>(context, listen: false);
-          _order_provider.clear();
           // ignore: non_constant_identifier_names
           var _picker_provider =
               Provider.of<PickerProvider>(context, listen: false);
-          _picker_provider.init();
+          _order_provider.clear();
+          _picker_provider.load_location(Location(
+              lat: object.location.latitude,
+              lng: object.location.longitude,
+              formattedAddress: "",
+              name: ""));
+          setState(() {});
         });
-        setState(() {});
       });
       return;
     }
@@ -152,6 +160,7 @@ class _AddOrderState extends State<AddOrder> {
                 TextField(
                   controller: _phone_controller,
                   textAlignVertical: const TextAlignVertical(y: 0.5),
+                  keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Số điện thoại',
