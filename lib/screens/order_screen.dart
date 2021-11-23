@@ -146,7 +146,7 @@ class _State extends State<OrderScreen> {
     // Generating the list of coordinates to be used for
     // drawing the polylines
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "AIzaSyA7eJkKK0Zp_mziFO_Gb-9OsdK99jYXx-A", // Google Maps API Key
+      "AIzaSyDpea3f8ZzDtnD2CZ8MqTzx-TuG2OwvVSM", // Google Maps API Key
       PointLatLng(startLatitude, startLongitude),
       PointLatLng(destinationLatitude, destinationLongitude),
     );
@@ -156,9 +156,7 @@ class _State extends State<OrderScreen> {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
-    } else {
-      print('null');
-    }
+    } else {}
 
     // Defining an ID
     PolylineId id = PolylineId('poly');

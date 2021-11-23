@@ -22,13 +22,22 @@ class BillingLogCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${model.name}',
-                  style: const TextStyle(
+              Text(model.name,
+                  style: TextStyle(
+                      decoration: model.enable
+                          ? TextDecoration.none
+                          : TextDecoration.lineThrough,
                       fontSize: 22,
                       color: Colors.green,
                       fontWeight: FontWeight.bold)),
               const SizedBox(height: 5),
-              Text('${model.address}', style: const TextStyle(fontSize: 20)),
+              Text('${model.address}',
+                  style: TextStyle(
+                    fontSize: 20,
+                    decoration: model.enable
+                        ? TextDecoration.none
+                        : TextDecoration.lineThrough,
+                  )),
               const SizedBox(height: 10),
               Text('${model.products.length} sản phẩm: ' + allProductNames,
                   style: const TextStyle(

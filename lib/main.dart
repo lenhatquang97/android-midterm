@@ -3,7 +3,7 @@ import 'package:android_midterm/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'provider/order_provider.dart';
 import 'provider/picker_provider.dart';
 
@@ -34,8 +34,11 @@ class MyApp extends StatelessWidget {
           routerDelegate: _appRouter.delegate(),
           routeInformationParser: _appRouter.defaultRouteParser(),
           debugShowCheckedModeBanner: false,
-          title: 'Android Midterm',
+          title: 'SoNo',
           theme: ThemeData(
+            textTheme: GoogleFonts.nunitoTextTheme(
+              Theme.of(context).textTheme,
+            ),
             primarySwatch: Colors.blue,
           ),
         ));
