@@ -98,7 +98,7 @@ class _AddDebtState extends State<AddDebt> {
         appBar: AppBar(
           backgroundColor: Colors.blue,
           title: const Text(
-            "Thêm khoản nợ",
+            "Đơn nợ",
             style: TextStyle(color: Colors.white),
           ),
           leading: IconButton(

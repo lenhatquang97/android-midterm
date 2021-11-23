@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           routerDelegate: _appRouter.delegate(),
           routeInformationParser: _appRouter.defaultRouteParser(),
           debugShowCheckedModeBanner: false,
-          title: 'Android Midterm',
+          title: 'SoNo',
           theme: ThemeData(
             textTheme: GoogleFonts.nunitoTextTheme(
               Theme.of(context).textTheme,
